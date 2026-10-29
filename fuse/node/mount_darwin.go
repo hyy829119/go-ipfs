@@ -4,7 +4,7 @@
 package node
 
 import (
-	"fmt"
+	"errors"
 	"os"
 
 	core "github.com/ipfs/kubo/core"
@@ -26,11 +26,10 @@ func darwinFuseCheck(_ *core.IpfsNode) error {
 			return nil
 		}
 	}
-	return fmt.Errorf(`macFUSE not found.
+	return errors.New(`macFUSE not found.
 
 macFUSE is required to mount FUSE filesystems on macOS.
 Install it from https://osxfuse.github.io/ or via Homebrew:
 
-    brew install macfuse
-`)
+    brew install macfuse`)
 }

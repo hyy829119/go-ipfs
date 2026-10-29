@@ -68,7 +68,7 @@ Learn more: https://github.com/ipfs/kubo/blob/master/docs/config.md#provide
 
 SEE ALSO:
 
-For ad-hoc immediate announcements, see 'ipfs provide once'.
+For ad-hoc immediate announcements, see 'ifshare provide once'.
 `,
 	},
 
@@ -147,7 +147,7 @@ CIDs can be passed as arguments or streamed from stdin (one per line).
 
 The default sweep provider (Provide.DHT.SweepEnabled=true) submits the CIDs
 to its burst-provide queue and returns as each CID is queued; dedicated
-burst workers publish the records to the DHT. Use 'ipfs provide stat' to
+burst workers publish the records to the DHT. Use 'ifshare provide stat' to
 monitor progress.
 
 The legacy provider (Provide.DHT.SweepEnabled=false) queues the CIDs for
@@ -408,11 +408,11 @@ EXAMPLES:
 
 Monitor provider statistics in real-time with 2-column layout:
 
-  watch ipfs provide stat --all --compact
+  watch ifshare provide stat --all --compact
 
 Get statistics in JSON format for programmatic processing:
 
-  ipfs provide stat --enc=json | jq
+  ifshare provide stat --enc=json | jq
 
 NOTES:
 

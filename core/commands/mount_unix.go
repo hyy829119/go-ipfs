@@ -30,12 +30,12 @@ Mount IPFS at a read-only mountpoint on the OS (default: /ipfs, /ipns, /mfs).
 All IPFS objects will be accessible under that directory. Note that the
 root will not be listable, as it is virtual. Access known paths directly.
 
-You may have to create /ipfs and /ipns before using 'ipfs mount':
+You may have to create /ipfs and /ipns before using 'ifshare mount':
 
 > sudo mkdir /ipfs /ipns /mfs
 > sudo chown $(whoami) /ipfs /ipns /mfs
-> ipfs daemon &
-> ipfs mount
+> ifshare daemon &
+> ifshare mount
 `,
 		LongDescription: `
 Mount IPFS at a read-only mountpoint on the OS. The default, /ipfs and /ipns,
@@ -43,29 +43,29 @@ are set in the configuration file, but can be overridden by the options.
 All IPFS objects will be accessible under this directory. Note that the
 root will not be listable, as it is virtual. Access known paths directly.
 
-You may have to create /ipfs and /ipns before using 'ipfs mount':
+You may have to create /ipfs and /ipns before using 'ifshare mount':
 
 > sudo mkdir /ipfs /ipns /mfs
 > sudo chown $(whoami) /ipfs /ipns /mfs
-> ipfs daemon &
-> ipfs mount
+> ifshare daemon &
+> ifshare mount
 
 Example:
 
 # setup
 > mkdir foo
 > echo "baz" > foo/bar
-> ipfs add -r foo
+> ifshare add -r foo
 added QmWLdkp93sNxGRjnFHPaYg8tCQ35NBY3XPn6KiETd3Z4WR foo/bar
 added QmSh5e7S6fdcu75LAbXNZAFY2nGyZUJXyLCJDvn2zRkWyC foo
-> ipfs ls QmSh5e7S6fdcu75LAbXNZAFY2nGyZUJXyLCJDvn2zRkWyC
+> ifshare ls QmSh5e7S6fdcu75LAbXNZAFY2nGyZUJXyLCJDvn2zRkWyC
 QmWLdkp93sNxGRjnFHPaYg8tCQ35NBY3XPn6KiETd3Z4WR 12 bar
-> ipfs cat QmWLdkp93sNxGRjnFHPaYg8tCQ35NBY3XPn6KiETd3Z4WR
+> ifshare cat QmWLdkp93sNxGRjnFHPaYg8tCQ35NBY3XPn6KiETd3Z4WR
 baz
 
 # mount
-> ipfs daemon &
-> ipfs mount
+> ifshare daemon &
+> ifshare mount
 IPFS mounted at: /ipfs
 IPNS mounted at: /ipns
 MFS  mounted at: /mfs

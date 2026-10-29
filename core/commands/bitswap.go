@@ -35,10 +35,11 @@ const (
 var deprecatedBitswapReprovideCmd = &cmds.Command{
 	Status: cmds.Deprecated,
 	Helptext: cmds.HelpText{
-		Tagline: "Deprecated command to announce to bitswap. Use 'ipfs routing reprovide' instead.",
+		Tagline: "Deprecated command to announce to bitswap. Use 'ifshare routing reprovide' instead.",
 		ShortDescription: `
-'ipfs bitswap reprovide' is a legacy plumbing command used to announce to DHT.
-Deprecated, use modern 'ipfs routing reprovide' instead.`,
+'ifshare bitswap reprovide' is a legacy plumbing command used to announce to
+DHT.
+Deprecated, use modern 'ifshare routing reprovide' instead.`,
 	},
 	Run: reprovideRoutingCmd.Run, // alias to routing reprovide to not break existing users
 }

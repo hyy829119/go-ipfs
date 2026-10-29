@@ -31,14 +31,14 @@ var sysProfileCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Collect a performance profile for debugging.",
 		ShortDescription: `
-Collects profiles from a running go-ipfs daemon into a single zip file.
+Collects profiles from a running ifshare daemon into a single zip file.
 To aid in debugging, this command also attempts to include a copy of
-the running go-ipfs binary.
+the running ifshare binary.
 `,
 		LongDescription: `
-Collects profiles from a running go-ipfs daemon into a single zipfile.
+Collects profiles from a running ifshare daemon into a single zipfile.
 To aid in debugging, this command also attempts to include a copy of
-the running go-ipfs binary.
+the running ifshare binary.
 
 Profiles can be examined using 'go tool pprof', some tips can be found at
 https://github.com/ipfs/kubo/blob/master/docs/debug-guide.md.
@@ -54,7 +54,7 @@ The output file includes:
 - A mutex profile.
 - A block profile.
 - Your copy of go-ipfs.
-- The output of 'ipfs version --all'.
+- The output of 'ifshare version --all'.
 
 It does not include:
 
@@ -65,7 +65,7 @@ It does not include:
 
 However, it could reveal:
 
-- Your build path, if you built go-ipfs yourself.
+- Your build path, if you built ifshare yourself.
 - If and how a command/feature is being used (inferred from running functions).
 - Memory offsets of various data structures.
 - Any modifications you've made to go-ipfs.

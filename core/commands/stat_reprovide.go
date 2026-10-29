@@ -7,10 +7,10 @@ import (
 var statReprovideCmd = &cmds.Command{
 	Status: cmds.Deprecated,
 	Helptext: cmds.HelpText{
-		Tagline: "Deprecated command, use 'ipfs provide stat' instead.",
+		Tagline: "Deprecated command, use 'ifshare provide stat' instead.",
 		ShortDescription: `
-'ipfs stats reprovide' is deprecated because provider stats are now
-available from 'ipfs provide stat'.
+'ifshare stats reprovide' is deprecated because provider stats are now
+available from 'ifshare provide stat'.
 `,
 	},
 	Arguments: provideStatCmd.Arguments,

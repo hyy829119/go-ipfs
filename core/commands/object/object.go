@@ -23,8 +23,10 @@ var ObjectCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Deprecated commands to interact with dag-pb objects. Use 'dag' or 'files' instead.",
 		ShortDescription: `
-'ipfs object' is a legacy plumbing command used to manipulate dag-pb objects
-directly. Deprecated, use more modern 'ipfs dag' and 'ipfs files' instead.`,
+'ifshare object' is a legacy plumbing command used to manipulate dag-pb
+objects
+directly. Deprecated, use more modern 'ifshare dag' and 'ifshare files'
+instead.`,
 	},
 
 	Subcommands: map[string]*cmds.Command{
@@ -42,9 +44,9 @@ directly. Deprecated, use more modern 'ipfs dag' and 'ipfs files' instead.`,
 var RemovedObjectCmd = &cmds.Command{
 	Status: cmds.Removed,
 	Helptext: cmds.HelpText{
-		Tagline: "Removed, use 'ipfs dag' or 'ipfs files' instead.",
+		Tagline: "Removed, use 'ifshare dag' or 'ifshare files' instead.",
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
-		return errors.New("removed, use 'ipfs dag' or 'ipfs files' instead")
+		return errors.New("removed, use 'ifshare dag' or 'ifshare files' instead")
 	},
 }

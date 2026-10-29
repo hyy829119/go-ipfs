@@ -106,7 +106,7 @@ Asks remote pinning service to pin an IPFS object from a given path or a CID.
 
 To pin CID 'bafkqaaa' to service named 'mysrv' under a pin named 'mypin':
 
-  $ ipfs pin remote add --service=mysrv --name=mypin bafkqaaa
+  $ ifshare pin remote add --service=mysrv --name=mypin bafkqaaa
 
 The above command will block until remote service returns 'pinned' status,
 which may take time depending on the size and available providers of the pinned
@@ -115,18 +115,18 @@ data.
 If you prefer to not wait for pinning confirmation and return immediately
 after remote service confirms 'queued' status, add the '--background' flag:
 
-  $ ipfs pin remote add --service=mysrv --name=mypin --background bafkqaaa
+  $ ifshare pin remote add --service=mysrv --name=mypin --background bafkqaaa
 
 Status of background pin requests can be inspected with the 'ls' command.
 
 To list all pins for the CID across all statuses:
 
-  $ ipfs pin remote ls --service=mysrv --cid=bafkqaaa --status=queued \
+  $ ifshare pin remote ls --service=mysrv --cid=bafkqaaa --status=queued \
       --status=pinning --status=pinned --status=failed
 
 NOTE: a comma-separated notation is supported in CLI for convenience:
 
-  $ ipfs pin remote ls --service=mysrv --cid=bafkqaaa --status=queued,pinning,pinned,failed
+  $ ifshare pin remote ls --service=mysrv --cid=bafkqaaa --status=queued,pinning,pinned,failed
 
 `,
 	},
@@ -386,20 +386,20 @@ practice to execute 'ls' before 'rm' to confirm the list of pins to be removed.
 
 To remove a single pin for a specific CID:
 
-  $ ipfs pin remote ls --service=mysrv --cid=bafkqaaa
-  $ ipfs pin remote rm --service=mysrv --cid=bafkqaaa
+  $ ifshare pin remote ls --service=mysrv --cid=bafkqaaa
+  $ ifshare pin remote rm --service=mysrv --cid=bafkqaaa
 
 When more than one pin matches the query on the remote service, an error is
 returned.  To confirm the removal of multiple pins, pass '--force':
 
-  $ ipfs pin remote ls --service=mysrv --name=popular-name
-  $ ipfs pin remote rm --service=mysrv --name=popular-name --force
+  $ ifshare pin remote ls --service=mysrv --name=popular-name
+  $ ifshare pin remote rm --service=mysrv --name=popular-name --force
 
 NOTE: When no '--status' is passed, implicit '--status=pinned' is used.
 To list and then remove all pending pin requests, pass an explicit status list:
 
-  $ ipfs pin remote ls --service=mysrv --status=queued,pinning,failed
-  $ ipfs pin remote rm --service=mysrv --status=queued,pinning,failed --force
+  $ ifshare pin remote ls --service=mysrv --status=queued,pinning,failed
+  $ ifshare pin remote rm --service=mysrv --status=queued,pinning,failed --force
 
 `,
 	},
@@ -465,9 +465,9 @@ TIP:
 
   To add services and test them by fetching pin count stats:
 
-  $ ipfs pin remote service add goodsrv https://pin-api.example.com secret-key
-  $ ipfs pin remote service add badsrv  https://bad-api.example.com invalid-key
-  $ ipfs pin remote service ls --stat
+  $ ifshare pin remote service add goodsrv https://pin-api.example.com secret-key
+  $ ifshare pin remote service add badsrv  https://bad-api.example.com invalid-key
+  $ ifshare pin remote service ls --stat
   goodsrv   https://pin-api.example.com 0/0/0/0
   badsrv    https://bad-api.example.com invalid
 
@@ -572,7 +572,7 @@ List remote pinning services.
 By default, only a name and an endpoint are listed; however, one can pass
 '--stat' to test each endpoint by fetching pin counts for each state:
 
-  $ ipfs pin remote service ls --stat
+  $ ifshare pin remote service ls --stat
   goodsrv   https://pin-api.example.com 0/0/0/0
   badsrv    https://bad-api.example.com invalid
 

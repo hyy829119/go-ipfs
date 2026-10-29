@@ -63,7 +63,7 @@ test_unit: test/bin/gotestsum $$(DEPS_GO)
 # Produces JSON for CI reporting
 # Override TEST_CLI_TIMEOUT for local development: make test_cli TEST_CLI_TIMEOUT=5m
 TEST_CLI_TIMEOUT ?= 10m
-test_cli: cmd/ipfs/ipfs test/bin/gotestsum $$(DEPS_GO)
+test_cli: cmd/ipfs/ifshare$(?exe) test/bin/gotestsum $$(DEPS_GO)
 	mkdir -p test/cli
 	rm -f test/cli/cli-tests.json
 	TEST_FUSE=0 PATH="$(CURDIR)/cmd/ipfs:$(CURDIR)/test/bin:$$PATH" gotestsum $(GOTESTSUM_NOCOLOR) --jsonfile test/cli/cli-tests.json -- -v -timeout=$(TEST_CLI_TIMEOUT) ./test/cli/... ./test/integration/... ./client/rpc/...
@@ -83,7 +83,7 @@ test_fuse_unit: test/bin/gotestsum $$(DEPS_GO)
 .PHONY: test_fuse_unit
 
 # FUSE CLI integration tests (test/cli/fuse/)
-test_fuse_cli: cmd/ipfs/ipfs test/bin/gotestsum $$(DEPS_GO)
+test_fuse_cli: cmd/ipfs/ifshare$(?exe) test/bin/gotestsum $$(DEPS_GO)
 	mkdir -p test/fuse
 	rm -f test/fuse/fuse-cli-tests.json
 	TEST_FUSE=1 PATH="$(CURDIR)/cmd/ipfs:$(CURDIR)/test/bin:$$PATH" gotestsum $(GOTESTSUM_NOCOLOR) --jsonfile test/fuse/fuse-cli-tests.json -- -v -timeout=$(TEST_FUSE_TIMEOUT) ./test/cli/fuse/...

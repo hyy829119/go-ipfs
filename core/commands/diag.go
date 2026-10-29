@@ -78,7 +78,8 @@ var diagDatastoreCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Low-level datastore inspection for debugging and testing.",
 		ShortDescription: `
-'ipfs diag datastore' provides low-level access to the datastore for debugging
+'ifshare diag datastore' provides low-level access to the datastore for
+debugging
 and testing purposes.
 
 WARNING: FOR DEBUGGING/TESTING ONLY
@@ -96,21 +97,21 @@ EXAMPLES
 
 Inspecting pubsub seqno validator state:
 
-  $ ipfs diag datastore count /pubsub/seqno/
+  $ ifshare diag datastore count /pubsub/seqno/
   2
-  $ ipfs diag datastore get --hex /pubsub/seqno/12D3KooW...
+  $ ifshare diag datastore get --hex /pubsub/seqno/12D3KooW...
   Key: /pubsub/seqno/12D3KooW...
   Hex Dump:
   00000000  18 81 81 c8 91 c0 ea f6  |........|
 
 Writing a test key (debugging only):
 
-  $ ipfs diag datastore put /test/mykey "hello"
+  $ ifshare diag datastore put /test/mykey "hello"
 
 Inspecting provider keystore (requires SweepEnabled):
 
-  $ ipfs diag datastore count /provider/keystore/0/
-  $ ipfs diag datastore count /provider/keystore/1/
+  $ ifshare diag datastore count /provider/keystore/0/
+  $ ifshare diag datastore count /provider/keystore/1/
 `,
 	},
 	Subcommands: map[string]*cmds.Command{

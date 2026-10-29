@@ -49,7 +49,7 @@ var cidFmtCmd = &cmds.Command{
 		LongDescription: `
 Format and converts <cid>'s in various useful ways.
 
-For a human-readable breakdown of a CID, see 'ipfs cid inspect'.
+For a human-readable breakdown of a CID, see 'ifshare cid inspect'.
 
 The optional format string is a printf style format string:
 ` + cidutil.FormatRef,
@@ -140,7 +140,7 @@ var base32Cmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Convert CIDs to Base32 CID version 1.",
 		ShortDescription: `
-'ipfs cid base32' normalizes passed CIDs to their canonical case-insensitive encoding.
+'ifshare cid base32' normalizes passed CIDs to their canonical case-insensitive encoding.
 Useful when processing third-party CIDs which could come with arbitrary formats.
 `,
 	},
@@ -276,7 +276,7 @@ var basesCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "List available multibase encodings.",
 		ShortDescription: `
-'ipfs cid bases' relies on https://github.com/multiformats/go-multibase
+'ifshare cid bases' relies on https://github.com/multiformats/go-multibase
 `,
 	},
 	Options: []cmds.Option{
@@ -329,12 +329,12 @@ var codecsCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "List available CID multicodecs.",
 		ShortDescription: `
-'ipfs cid codecs' relies on https://github.com/multiformats/go-multicodec
+'ifshare cid codecs' relies on https://github.com/multiformats/go-multicodec
 `,
 	},
 	Options: []cmds.Option{
 		cmds.BoolOption(codecsNumericOptionName, "n", "also include numeric codes"),
-		cmds.BoolOption(codecsSupportedOptionName, "s", "list only codecs supported by go-ipfs commands"),
+		cmds.BoolOption(codecsSupportedOptionName, "s", "list only codecs supported by ifshare commands"),
 	},
 	Run: func(req *cmds.Request, resp cmds.ResponseEmitter, env cmds.Environment) error {
 		listSupported, _ := req.Options[codecsSupportedOptionName].(bool)
@@ -385,7 +385,7 @@ var hashesCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "List available multihashes.",
 		ShortDescription: `
-'ipfs cid hashes' relies on https://github.com/multiformats/go-multihash
+'ifshare cid hashes' relies on https://github.com/multiformats/go-multihash
 `,
 	},
 	Options: codecsCmd.Options,
@@ -438,7 +438,7 @@ var inspectCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Inspect and display detailed information about a CID.",
 		ShortDescription: `
-'ipfs cid inspect' breaks down a CID and displays its components:
+'ifshare cid inspect' breaks down a CID and displays its components:
 - CID version (0 or 1)
 - Multibase encoding (explicit for CIDv1, implicit for CIDv0)
 - Multicodec (DAG type)

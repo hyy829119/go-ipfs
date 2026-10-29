@@ -227,7 +227,7 @@ func ValidateProvideConfig(cfg *Provide) error {
 		//     periodic reprovide schedule.
 		if interval == 0 && cfg.Enabled == Default {
 			return fmt.Errorf("Provide.DHT.Interval=0 no longer disables the provide system on its own; set Provide.Enabled explicitly: " +
-				"Provide.Enabled=false to fully disable providing, or Provide.Enabled=true to keep ad-hoc 'ipfs provide once' " +
+				"Provide.Enabled=false to fully disable providing, or Provide.Enabled=true to keep ad-hoc 'ifshare provide once' " +
 				"and fast-provide-root working while skipping the periodic reprovide schedule")
 		}
 	}

@@ -33,24 +33,31 @@ const (
 )
 
 // nolint
-var errRepoExists = errors.New(`ipfs configuration file already exists!
+var errRepoExists = errors.New(`ifshare configuration file already exists!
 Reinitializing would overwrite your keys
 `)
 
 var initCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
-		Tagline: "Initializes ipfs config file.",
+		Tagline: "Initializes ifshare config file.",
 		ShortDescription: `
-Initializes ipfs configuration files and generates a new keypair.
+Initializes ifshare configuration files and generates a new keypair.
 
-If you are going to run IPFS in server environment, you may want to
+New repositories start with an empty Bootstrap list and AutoConf disabled.
+Add your own peers with 'ifshare bootstrap add <multiaddr>'. To opt into
+public network defaults, use 'ifshare init --profile=autoconf-on'.
+An empty Bootstrap list does not isolate the node: private networks also
+require a shared swarm.key. See the private network documentation:
+https://github.com/ipfs/kubo/blob/master/docs/experimental-features.md
+
+If you are going to run ifshare in server environment, you may want to
 initialize it using 'server' profile.
 
-For the list of available profiles see 'ipfs config profile --help'
+For the list of available profiles see 'ifshare config profile --help'
 
 To initialize from an existing configuration, pass a copy of a repo's
 'config' file as the argument ('-' reads it from stdin). The output of
-'ipfs config show' does not work here because it has no private key.
+'ifshare config show' does not work here because it has no private key.
 Profiles given with --profile are applied on top of the file.
 
 The datastore layout is fixed at init time. By default ('flatfs-levelds'
@@ -61,7 +68,7 @@ flatfs for blocks and uses pebble instead of leveldb, and 'pebbleds' puts
 everything in pebble. Details and trade-offs:
 https://github.com/ipfs/kubo/blob/master/docs/datastores.md
 
-ipfs uses a repository in the local file system. By default, the repo is
+ifshare uses a repository in the local file system. By default, the repo is
 located at ~/.ipfs. To change the repo location, set the $IPFS_PATH
 environment variable:
 
@@ -162,10 +169,10 @@ func doInit(out io.Writer, repoRoot string, empty bool, confProfiles string, con
 	// a config without a private key (the output of 'ipfs config show')
 	// seeds a repo that panics on every later start
 	if conf.Identity.PrivKey == "" {
-		return errors.New("config file has no Identity.PrivKey. Pass a copy of a repo's 'config' file, not the output of 'ipfs config show'")
+		return errors.New("config file has no Identity.PrivKey. Pass a copy of a repo's 'config' file, not the output of 'ifshare config show'")
 	}
 
-	if _, err := fmt.Fprintf(out, "initializing IPFS node at %s\n", repoRoot); err != nil {
+	if _, err := fmt.Fprintf(out, "initializing ifshare node at %s\n", repoRoot); err != nil {
 		return err
 	}
 
@@ -247,7 +254,7 @@ func addDefaultAssets(out io.Writer, repoRoot string) error {
 		return err
 	}
 
-	_, err = fmt.Fprintf(out, "\n\tipfs cat /ipfs/%s/readme\n\n", dkey)
+	_, err = fmt.Fprintf(out, "\n\tifshare cat /ipfs/%s/readme\n\n", dkey)
 	return err
 }
 

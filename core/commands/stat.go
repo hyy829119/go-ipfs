@@ -19,10 +19,10 @@ import (
 var StatsCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Query IPFS statistics.",
-		ShortDescription: `'ipfs stats' is a set of commands to help look at statistics
+		ShortDescription: `'ifshare stats' is a set of commands to help look at statistics
 for your IPFS node.
 `,
-		LongDescription: `'ipfs stats' is a set of commands to help look at statistics
+		LongDescription: `'ifshare stats' is a set of commands to help look at statistics
 for your IPFS node.`,
 	},
 
@@ -46,10 +46,10 @@ const (
 var statBwCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Print IPFS bandwidth information.",
-		ShortDescription: `'ipfs stats bw' prints bandwidth information for the ipfs daemon.
+		ShortDescription: `'ifshare stats bw' prints bandwidth information for the ifshare daemon.
 It displays: TotalIn, TotalOut, RateIn, RateOut.
 		`,
-		LongDescription: `'ipfs stats bw' prints bandwidth information for the ipfs daemon.
+		LongDescription: `'ifshare stats bw' prints bandwidth information for the ifshare daemon.
 It displays: TotalIn, TotalOut, RateIn, RateOut.
 
 By default, overall bandwidth and all protocols are shown. To limit bandwidth
@@ -66,13 +66,13 @@ Example protocol options:
 
 Example:
 
-    > ipfs stats bw -t /ipfs/bitswap
+    > ifshare stats bw -t /ipfs/bitswap
     Bandwidth
     TotalIn: 5.0MB
     TotalOut: 0B
     RateIn: 343B/s
     RateOut: 0B/s
-    > ipfs stats bw -p QmepgFW7BHEtU4pZJdxaNiv75mKLLRQnPi1KaaXmQN4V1a
+    > ifshare stats bw -p QmepgFW7BHEtU4pZJdxaNiv75mKLLRQnPi1KaaXmQN4V1a
     Bandwidth
     TotalIn: 4.9MB
     TotalOut: 12MB

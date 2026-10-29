@@ -68,7 +68,7 @@ var addPinCmd = &cmds.Command{
 Create a pin for the given object, protecting resolved CID from being garbage
 collected.
 
-An optional name can be provided, and read back via 'ipfs pin ls --names'.
+An optional name can be provided, and read back via 'ifshare pin ls --names'.
 
 Be mindful of defaults:
 
@@ -330,7 +330,7 @@ collected if needed. (By default, recursively. Use -r=false for direct pins.)
 
 A pin may not be removed because the specified object is not pinned or pinned
 indirectly. To determine if the object is pinned indirectly, use the command:
-ipfs pin ls -t indirect <cid>
+ifshare pin ls -t indirect <cid>
 `,
 	},
 
@@ -430,18 +430,18 @@ object. And if --type=<type> is additionally used, the command will also fail
 if any of the arguments is not of the specified type.
 
 Example:
-	$ echo "hello" | ipfs add -q
+	$ echo "hello" | ifshare add -q
 	QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN
-	$ ipfs pin ls
+	$ ifshare pin ls
 	QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN recursive
 	# now remove the pin, and repin it directly
-	$ ipfs pin rm QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN
+	$ ifshare pin rm QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN
 	unpinned QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN
-	$ ipfs pin add -r=false QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN
+	$ ifshare pin add -r=false QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN
 	pinned QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN directly
-	$ ipfs pin ls --type=direct
+	$ ifshare pin ls --type=direct
 	QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN direct
-	$ ipfs pin ls QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN
+	$ ifshare pin ls QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN
 	QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN direct
 `,
 	},

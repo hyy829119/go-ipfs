@@ -123,11 +123,13 @@ For testing arbitrary commits and experimental patches (force push to `staging` 
 ```bash
 git clone https://github.com/ipfs/kubo.git
 cd kubo
-make build    # creates cmd/ipfs/ipfs
-make install  # installs to $GOPATH/bin/ipfs
+make build    # creates cmd/ipfs/ifshare
+make install  # installs ifshare to $GOBIN, or $GOPATH/bin if unset
 ```
 
 See the [Developer Guide](docs/developer-guide.md) for details, Windows instructions, and troubleshooting.
+
+For private deployments of this build, see the [ifshare 私有网络部署与交付操作说明](docs/private-network-zh.md).
 
 ### Package Managers
 

@@ -37,29 +37,29 @@ Before you begin, ensure you have:
 git clone https://github.com/ipfs/kubo.git
 cd kubo
 make build
-./cmd/ipfs/ipfs version
+./cmd/ipfs/ifshare version
 ```
 
 You should see output like:
 
 ```
-ipfs version 0.34.0-dev
+ifshare version 0.44.0-dev
 ```
 
-The binary is built to `cmd/ipfs/ipfs`. To install it system-wide:
+The binary is built to `cmd/ipfs/ifshare`. To install it system-wide:
 
 ```bash
 make install
 ```
 
-This installs the binary to `$GOPATH/bin`.
+This installs `ifshare` to `$GOBIN`, or `$GOPATH/bin` when `$GOBIN` is unset. The executable name changes; CLI subcommands, `IPFS_PATH`, and repository formats remain compatible with Kubo.
 
 ## Building
 
 | Command | Description |
 |---------|-------------|
-| `make build` | build the `ipfs` binary to `cmd/ipfs/ipfs` |
-| `make install` | install to `$GOPATH/bin` |
+| `make build` | build the `ifshare` binary to `cmd/ipfs/ifshare` |
+| `make install` | install `ifshare` to `$GOBIN` or `$GOPATH/bin` |
 | `make nofuse` | build without FUSE support |
 | `make build CGO_ENABLED=0` | build without CGO (no C compiler needed) |
 
@@ -141,7 +141,7 @@ Run with verbose output:
 go test ./test/cli/... -v
 ```
 
-**Common error**: "version (16) is lower than repos (17)" means your `PATH` points to an old binary. Check `which ipfs` and rebuild with `make build`.
+**Common error**: "version (16) is lower than repos (17)" means your `PATH` points to an old binary. Check `which ifshare` and rebuild with `make build`.
 
 ### Sharness Tests (`test/sharness`)
 
@@ -269,7 +269,7 @@ This means the `ipfs` binary in your `PATH` is older than expected.
 Check which binary is being used:
 
 ```bash
-which ipfs
+which ifshare
 ```
 
 Rebuild and verify PATH:
@@ -277,7 +277,7 @@ Rebuild and verify PATH:
 ```bash
 make build
 export PATH="$PWD/cmd/ipfs:$PATH"
-./cmd/ipfs/ipfs version
+./cmd/ipfs/ifshare version
 ```
 
 ### FUSE Issues

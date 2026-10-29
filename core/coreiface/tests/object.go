@@ -146,7 +146,7 @@ func (tp *TestSuite) TestObjectAddLinkValidation(t *testing.T) {
 	hamtPath := path.FromCid(hamtNode.Cid())
 
 	_, err = api.Object().AddLink(ctx, hamtPath, "foo", child)
-	require.ErrorContains(t, err, "cannot add links to a HAMTShard at the dag-pb level (would corrupt the HAMT bitfield); use 'ipfs files' commands instead, or pass --allow-non-unixfs to override")
+	require.ErrorContains(t, err, "cannot add links to a HAMTShard at the dag-pb level (would corrupt the HAMT bitfield); use 'ifshare files' commands instead, or pass --allow-non-unixfs to override")
 
 	// HAMTShard with SkipUnixFSValidation: allowed
 	_, err = api.Object().AddLink(ctx, hamtPath, "foo", child, opt.Object.SkipUnixFSValidation(true))
@@ -234,7 +234,7 @@ func (tp *TestSuite) TestObjectRmLinkValidation(t *testing.T) {
 	hamtPath := path.FromCid(hamtNode.Cid())
 
 	_, err = api.Object().RmLink(ctx, hamtPath, "foo")
-	require.ErrorContains(t, err, "cannot remove links from a HAMTShard at the dag-pb level (would corrupt the HAMT bitfield); use 'ipfs files rm' instead, or pass --allow-non-unixfs to override")
+	require.ErrorContains(t, err, "cannot remove links from a HAMTShard at the dag-pb level (would corrupt the HAMT bitfield); use 'ifshare files rm' instead, or pass --allow-non-unixfs to override")
 
 	// HAMTShard with SkipUnixFSValidation: allowed (validation bypassed)
 	_, err = api.Object().RmLink(ctx, hamtPath, "foo", opt.Object.RmLinkSkipUnixFSValidation(true))

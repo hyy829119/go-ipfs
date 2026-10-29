@@ -103,7 +103,7 @@ install_unsupported: install
 .PHONY: install_unsupported
 
 uninstall:
-	$(GOCC) clean -i ./cmd/ipfs
+	rm -f "$(IFSHARE_INSTALL_DIR)/ifshare$(?exe)"
 .PHONY: uninstall
 
 supported:
@@ -120,9 +120,9 @@ help:
 	@echo 'BUILD TARGETS:'
 	@echo ''
 	@echo '  all          - print this help message'
-	@echo '  build        - Build binary at ./cmd/ipfs/ipfs'
+	@echo '  build        - Build binary at ./cmd/ipfs/ifshare'
 	@echo '  nofuse       - Build binary with no fuse support'
-	@echo '  install      - Build binary and install into $$GOBIN'
+	@echo '  install      - Install ifshare into $$GOBIN or $$GOPATH/bin'
 	@echo '  mod_tidy     - Remove unused dependencies from go.mod files'
 #	@echo '  dist_install - TODO: c.f. ./cmd/ipfs/dist/README.md'
 	@echo ''

@@ -705,7 +705,9 @@ Controls whether the AutoConf system is active. When enabled, Kubo will fetch co
 
 This provides a safety mechanism to ensure nodes don't start with unresolved placeholders when AutoConf is intentionally disabled.
 
-Default: `true`
+New repositories explicitly set this to `false` and initialize `Bootstrap`, `DNS.Resolvers`, `Routing.DelegatedRouters`, and `Ipns.DelegatedPublishers` as empty collections. This lets operators configure their own network without fetching public infrastructure defaults. To enable automatic public network configuration, use `ifshare init --profile=autoconf-on` for a new repository, or `ifshare config profile apply autoconf-on` for an existing one. To disable it and clear those fields again, apply the `autoconf-off` profile.
+
+Default: `false` in newly initialized repositories; `true` when the field is absent or `null` in an existing configuration.
 
 Type: `flag`
 
@@ -915,17 +917,15 @@ Type: `flag`
 
 Bootstrap peers help your node discover and connect to the IPFS network when starting up. This array contains [multiaddrs][multiaddr] of trusted nodes that your node contacts first to find other peers and content.
 
-The special value `"auto"` automatically uses curated, up-to-date bootstrap peers from [AutoConf](#autoconf), ensuring your node can always connect to the healthy network without manual maintenance.
+New repositories initialize this field as `[]`. Add your own trusted peers with `ifshare bootstrap add <multiaddr>`. This changes initialization only; existing repositories keep their configured peers.
 
-**What this gives you:**
+The optional value `"auto"` uses bootstrap peers from [AutoConf](#autoconf) when enabled. To opt into public network defaults, use `ifshare init --profile=autoconf-on` or apply the `autoconf-on` profile to an existing repository.
 
-- **Reliable startup**: Your node can always find the network, even if some bootstrap peers go offline
-- **Automatic updates**: New bootstrap peers are added as the network evolves
-- **Custom control**: Add your own trusted peers alongside or instead of the defaults
+An empty list does not make the node private. For an isolated network, distribute the same `swarm.key` to every participating node and configure your own bootstrap peers. See [private networks](experimental-features.md#private-networks). Local peer discovery remains enabled unless you set `Discovery.MDNS.Enabled=false`.
 
 An empty list turns off all bootstrap dialing, including backup peers saved from earlier runs. The node then connects only to `Peering.Peers`, peers found through mDNS, and peers you connect manually. Backup peers are dialed only after the configured peers, when those leave the node below the minimum peer count.
 
-Default: `["auto"]`
+Default: `[]`
 
 Type: `array[string]` ([multiaddrs][multiaddr] or `"auto"`)
 
@@ -2092,7 +2092,7 @@ When using `"auto"`, inspect the effective publishers with: `ipfs config Ipns.De
 
 For self-hosting, you can run your own `/routing/v1/ipns` endpoint using [someguy](https://github.com/ipfs/someguy/).
 
-Default: `["auto"]`
+Default: `[]` (`["auto"]` with the `autoconf-on` profile)
 
 Type: `array[string]` (URLs or `"auto"`)
 
@@ -3086,7 +3086,7 @@ You can combine `"auto"` with custom URLs (e.g., `["auto", "https://custom.examp
 >
 > One can run their own delegated router either by implementing the [Delegated Routing V1 HTTP API](https://specs.ipfs.tech/routing/http-routing-v1/) themselves, or by using [Someguy](https://github.com/ipfs/someguy), a turn-key implementation that proxies requests to other routing systems. A public utility instance of Someguy is hosted at [`https://delegated-ipfs.dev`](https://docs.ipfs.tech/concepts/public-utilities/#delegated-routing).
 
-Default: `["auto"]`
+Default: `[]` (`["auto"]` with the `autoconf-on` profile)
 
 Type: `array[string]` (URLs or `"auto"`)
 
@@ -3958,7 +3958,7 @@ Be mindful that:
 - The special value `"auto"` uses DNS resolvers from [AutoConf](#autoconf) when enabled. For example: `{".": "auto"}` uses any custom DoH resolver (global or per TLD) provided by AutoConf system.
 - When [`AutoTLS.SkipDNSLookup`](#autotlsskipdnslookup) is enabled (default), domains matching [`AutoTLS.DomainSuffix`](#autotlsdomainsuffix) (default: `libp2p.direct`) are resolved locally by parsing the IP directly from the hostname. Set `AutoTLS.SkipDNSLookup=false` to force network DNS lookups for these domains.
 
-Default: `{".": "auto"}`
+Default: `{}` (`{".": "auto"}` with the `autoconf-on` profile)
 
 Type: `object[string -> string]`
 
@@ -4539,8 +4539,7 @@ is useful when using the daemon in test environments.
 
 ### `default-networking` profile
 
-Restores default network settings.
-Inverse profile of the test profile.
+Restores the public network settings used by the inverse of the `test` profile, including `Bootstrap=["auto"]` and enabled AutoConf. This explicitly opts into public bootstrap peers; it does not restore the empty bootstrap list used by newly initialized repositories.
 
 ### `autoconf-on` profile
 
@@ -4550,7 +4549,7 @@ Can also be used with custom AutoConf.URL for other networks.
 ### `autoconf-off` profile
 
 Disables AutoConf and clears all networking fields for manual configuration.
-Use this for private networks or when you want explicit control over all endpoints.
+New repositories already start with AutoConf disabled and these fields empty. Use this profile to clear an existing repository's automatic network configuration before adding private peers or endpoints. It does not create a `swarm.key` or disable local discovery, AutoTLS, or telemetry; see [private networks](experimental-features.md#private-networks).
 
 ### `flatfs` profile
 

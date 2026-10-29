@@ -43,15 +43,15 @@ var migrationInstructions = `See https://github.com/ipfs/fs-repo-migrations/blob
 Sorry for the inconvenience. In the future, these will run automatically.`
 
 var programTooLowMessage = `Your programs version (%d) is lower than your repos (%d).
-Please update ipfs to a version that supports the existing repo, or run
+Please update ifshare to a version that supports the existing repo, or run
 a migration in reverse.
 
 See https://github.com/ipfs/fs-repo-migrations/blob/master/run.md for details.`
 
 var (
 	ErrNoVersion     = errors.New("no version file found, please run 0-to-1 migration tool.\n" + migrationInstructions)
-	ErrOldRepo       = errors.New("ipfs repo found in old '~/.go-ipfs' location, please run migration tool.\n" + migrationInstructions)
-	ErrNeedMigration = errors.New("ipfs repo needs migration, please run migration tool.\n" + migrationInstructions)
+	ErrOldRepo       = errors.New("ifshare repo found in old '~/.go-ipfs' location, please run migration tool.\n" + migrationInstructions)
+	ErrNeedMigration = errors.New("ifshare repo needs migration, please run migration tool.\n" + migrationInstructions)
 )
 
 type NoRepoError struct {
@@ -61,7 +61,7 @@ type NoRepoError struct {
 var _ error = NoRepoError{}
 
 func (err NoRepoError) Error() string {
-	return fmt.Sprintf("no IPFS repo found in %s.\nplease run: 'ipfs init'", err.Path)
+	return fmt.Sprintf("no ifshare repo found in %s.\nplease run: 'ifshare init'", err.Path)
 }
 
 const (
@@ -514,7 +514,7 @@ func (r *FSRepo) openDatastore() error {
 	if oldSpec != spec.String() {
 		return fmt.Errorf("config Datastore.Spec %s does not match the repo's datastore_spec file %s. "+
 			"The datastore layout, including the flatfs shardFunc, is fixed when the repo is created. "+
-			"Revert Datastore.Spec, or create a new repo with 'ipfs init' and move your data there",
+			"Revert Datastore.Spec, or create a new repo with 'ifshare init' and move your data there",
 			spec.String(), oldSpec)
 	}
 

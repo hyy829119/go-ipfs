@@ -59,11 +59,11 @@ var swarmAddrsAutoNATCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Show address reachability as determined by AutoNAT V2.",
 		ShortDescription: `
-'ipfs swarm addrs autonat' shows the reachability status of your node's
+'ifshare swarm addrs autonat' shows the reachability status of your node's
 addresses as determined by AutoNAT V2.
 `,
 		LongDescription: `
-'ipfs swarm addrs autonat' shows the reachability status of your node's
+'ifshare swarm addrs autonat' shows the reachability status of your node's
 addresses as verified by AutoNAT V2.
 
 AutoNAT V2 probes your node's addresses to determine if they are reachable
@@ -81,7 +81,7 @@ https://github.com/libp2p/specs/blob/master/autonat/autonat-v2.md
 
 Example:
 
-    > ipfs swarm addrs autonat
+    > ifshare swarm addrs autonat
     AutoNAT V2 Status:
       Reachability: Public
 

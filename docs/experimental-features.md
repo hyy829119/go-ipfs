@@ -160,27 +160,31 @@ To join a given private network, get the key file from someone in the network
 and save it to `~/.ipfs/swarm.key` (If you are using a custom `$IPFS_PATH`, put
 it in there instead).
 
-When using this feature, you will not be able to connect to the default bootstrap
-nodes (Since we aren't part of your private network) so you will need to set up
-your own bootstrap nodes.
+New repositories created by this build already have `Bootstrap=[]` and `AutoConf.Enabled=false`, with empty DNS resolver, delegated router, and delegated IPNS publisher configuration. An empty bootstrap list alone does not isolate the network; all participating nodes must use the same `swarm.key`.
 
-First, to prevent your node from even trying to connect to the default bootstrap nodes, run:
+For an existing repository, stop the daemon and clear its automatic network configuration before adding your private peers. The following profile clears any existing bootstrap peers and delegated endpoints as well:
+
 ```bash
-ipfs bootstrap rm --all
+ifshare config profile apply autoconf-off
 ```
 
-Then add your own bootstrap peers with:
+Use TCP listeners for the private swarm, disable public AutoTLS and telemetry, and use DHT routing. The `server` profile filters private IP ranges, so do not apply it to nodes that need to connect over LAN addresses.
+
 ```bash
-ipfs bootstrap add <multiaddr>
+ifshare config --json Addresses.Swarm '["/ip4/0.0.0.0/tcp/4001"]'
+ifshare config Routing.Type dht
+ifshare config --json AutoTLS.Enabled false
+ifshare config Plugins.Plugins.telemetry.Config.Mode off
 ```
 
-For example:
-```
-ipfs bootstrap add /ip4/104.236.76.40/tcp/4001/p2p/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U6aXMJDAbzgu2fzaDs64
+Then add your own bootstrap peers, substituting the IP address, TCP port, and peer ID of a node in your private network:
+
+```bash
+ifshare bootstrap add '/ip4/192.168.1.10/tcp/4001/p2p/<bootstrap-peer-id>'
 ```
 
 Bootstrap nodes are no different from all other nodes in the network apart from
-the function they serve.
+the function they serve. Each node has its own identity key; share only `swarm.key`, not the repository's `config` file. To discover peers only through your configured bootstrap or peering list and manual connections, also set `Discovery.MDNS.Enabled=false`.
 
 To be extra cautious, You can also set the `LIBP2P_FORCE_PNET` environment
 variable to `1` to force the usage of private networks. If no private network is

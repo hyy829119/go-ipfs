@@ -13,6 +13,7 @@ If you're experiencing an issue with IPFS, please [file an issue](https://github
 
 ## Running Kubo
 
+- [ifshare 私有网络部署与交付操作说明](private-network-zh.md)
 - [Gateway configuration](gateway.md)
 - [Delegated routing](delegated-routing.md)
 - [Content blocking](content-blocking.md) (for public node operators)

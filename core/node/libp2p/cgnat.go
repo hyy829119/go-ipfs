@@ -221,7 +221,7 @@ const cgnatNotice = `WARNING: carrier-grade NAT (CGNAT) detected
     NAT table and disrupt internet for every device on your network.
   If your home internet drops, reduce this node's footprint:
     https://docs.ipfs.tech/how-to/nat-configuration/
-  Silence this notice with: ipfs config --json Internal.CGNATCheck false`
+  Silence this notice with: ifshare config --json Internal.CGNATCheck false`
 
 const doubleNATNotice = `NOTICE: this node appears to be behind double NAT
   Your router's WAN address is itself private, so another NAT sits above it,
@@ -230,7 +230,7 @@ const doubleNATNotice = `NOTICE: this node appears to be behind double NAT
   - A busy node can fill the upstream shared NAT table and disrupt internet for your network.
   If your home internet drops, reduce this node's footprint:
     https://docs.ipfs.tech/how-to/nat-configuration/
-  Silence this notice with: ipfs config --json Internal.CGNATCheck false`
+  Silence this notice with: ifshare config --json Internal.CGNATCheck false`
 
 func logCGNATNotice()     { fmt.Fprintln(cgnatNoticeOut, cgnatNotice) }
 func logDoubleNATNotice() { fmt.Fprintln(cgnatNoticeOut, doubleNATNotice) }

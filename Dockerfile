@@ -65,12 +65,13 @@ COPY --from=utilities /usr/sbin/gosu /sbin/gosu
 COPY --from=utilities /usr/bin/tini /sbin/tini
 COPY --from=utilities /bin/fusermount /usr/local/bin/fusermount
 COPY --from=utilities /etc/ssl/certs /etc/ssl/certs
-COPY --from=builder $SRC_DIR/cmd/ipfs/ipfs /usr/local/bin/ipfs
+COPY --from=builder $SRC_DIR/cmd/ipfs/ifshare /usr/local/bin/ifshare
 COPY --from=builder --chmod=755 $SRC_DIR/bin/container_daemon /usr/local/bin/start_ipfs
 COPY --from=builder $SRC_DIR/bin/container_init_run /usr/local/bin/container_init_run
 
 # Set SUID for fusermount to enable FUSE mounting by non-root user
-RUN chmod 4755 /usr/local/bin/fusermount
+RUN chmod 4755 /usr/local/bin/fusermount \
+  && ln -s ifshare /usr/local/bin/ipfs
 
 # Swarm P2P port (TCP/UDP) - expose publicly for peer connections
 EXPOSE 4001 4001/udp

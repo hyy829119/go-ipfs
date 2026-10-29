@@ -13,7 +13,7 @@ import (
 	gomod "golang.org/x/mod/module"
 )
 
-var versionRegexp = regexp.MustCompile(`^ipfs version (.+)$`)
+var versionRegexp = regexp.MustCompile(`^ifshare version (.+)$`)
 
 func parseVersionOutput(s string) semver.Version {
 	versString := versionRegexp.FindStringSubmatch(s)[1]
@@ -49,7 +49,7 @@ func TestIPFSVersionAll(t *testing.T) {
 	node := harness.NewT(t).NewNode()
 	res := node.IPFS("version", "--all").Stdout.String()
 	res = strings.TrimSpace(res)
-	assert.Contains(t, res, "Kubo version")
+	assert.Contains(t, res, "ifshare version")
 	assert.Contains(t, res, "Repo version")
 	assert.Contains(t, res, "System version")
 	assert.Contains(t, res, "Golang version")
@@ -83,9 +83,9 @@ func TestIPFSCommands(t *testing.T) {
 	t.Parallel()
 	node := harness.NewT(t).NewNode()
 	cmds := node.IPFSCommands()
-	assert.Contains(t, cmds, "ipfs add")
-	assert.Contains(t, cmds, "ipfs daemon")
-	assert.Contains(t, cmds, "ipfs update")
+	assert.Contains(t, cmds, "ifshare add")
+	assert.Contains(t, cmds, "ifshare daemon")
+	assert.Contains(t, cmds, "ifshare update")
 }
 
 func TestAllSubcommandsAcceptHelp(t *testing.T) {
@@ -136,60 +136,60 @@ func TestCommandDocsWidth(t *testing.T) {
 
 	// require new commands to explicitly opt in to longer lines
 	allowList := map[string]bool{
-		"ipfs add":                      true,
-		"ipfs block put":                true,
-		"ipfs daemon":                   true,
-		"ipfs config profile":           true,
-		"ipfs pin remote service":       true,
-		"ipfs name pubsub":              true,
-		"ipfs object patch":             true,
-		"ipfs swarm connect":            true,
-		"ipfs p2p forward":              true,
-		"ipfs p2p close":                true,
-		"ipfs swarm disconnect":         true,
-		"ipfs swarm addrs listen":       true,
-		"ipfs dag resolve":              true,
-		"ipfs dag get":                  true,
-		"ipfs pin remote add":           true,
-		"ipfs config show":              true,
-		"ipfs config edit":              true,
-		"ipfs pin remote rm":            true,
-		"ipfs pin remote ls":            true,
-		"ipfs pin verify":               true,
-		"ipfs pin remote service add":   true,
-		"ipfs pin update":               true,
-		"ipfs pin rm":                   true,
-		"ipfs p2p":                      true,
-		"ipfs resolve":                  true,
-		"ipfs dag stat":                 true,
-		"ipfs name publish":             true,
-		"ipfs object diff":              true,
-		"ipfs object patch add-link":    true,
-		"ipfs name":                     true,
-		"ipfs diag profile":             true,
-		"ipfs diag cmds":                true,
-		"ipfs swarm addrs local":        true,
-		"ipfs files ls":                 true,
-		"ipfs stats bw":                 true,
-		"ipfs swarm peers":              true,
-		"ipfs pubsub sub":               true,
-		"ipfs files write":              true,
-		"ipfs swarm limit":              true,
-		"ipfs commands completion fish": true,
-		"ipfs key export":               true,
-		"ipfs routing get":              true,
-		"ipfs refs":                     true,
-		"ipfs refs local":               true,
-		"ipfs cid base32":               true,
-		"ipfs pubsub pub":               true,
-		"ipfs repo ls":                  true,
-		"ipfs routing put":              true,
-		"ipfs key import":               true,
-		"ipfs swarm peering add":        true,
-		"ipfs swarm peering rm":         true,
-		"ipfs swarm peering ls":         true,
-		"ipfs update":                   true,
-		"ipfs swarm stats":              true,
+		"ifshare add":                      true,
+		"ifshare block put":                true,
+		"ifshare daemon":                   true,
+		"ifshare config profile":           true,
+		"ifshare pin remote service":       true,
+		"ifshare name pubsub":              true,
+		"ifshare object patch":             true,
+		"ifshare swarm connect":            true,
+		"ifshare p2p forward":              true,
+		"ifshare p2p close":                true,
+		"ifshare swarm disconnect":         true,
+		"ifshare swarm addrs listen":       true,
+		"ifshare dag resolve":              true,
+		"ifshare dag get":                  true,
+		"ifshare pin remote add":           true,
+		"ifshare config show":              true,
+		"ifshare config edit":              true,
+		"ifshare pin remote rm":            true,
+		"ifshare pin remote ls":            true,
+		"ifshare pin verify":               true,
+		"ifshare pin remote service add":   true,
+		"ifshare pin update":               true,
+		"ifshare pin rm":                   true,
+		"ifshare p2p":                      true,
+		"ifshare resolve":                  true,
+		"ifshare dag stat":                 true,
+		"ifshare name publish":             true,
+		"ifshare object diff":              true,
+		"ifshare object patch add-link":    true,
+		"ifshare name":                     true,
+		"ifshare diag profile":             true,
+		"ifshare diag cmds":                true,
+		"ifshare swarm addrs local":        true,
+		"ifshare files ls":                 true,
+		"ifshare stats bw":                 true,
+		"ifshare swarm peers":              true,
+		"ifshare pubsub sub":               true,
+		"ifshare files write":              true,
+		"ifshare swarm limit":              true,
+		"ifshare commands completion fish": true,
+		"ifshare key export":               true,
+		"ifshare routing get":              true,
+		"ifshare refs":                     true,
+		"ifshare refs local":               true,
+		"ifshare cid base32":               true,
+		"ifshare pubsub pub":               true,
+		"ifshare repo ls":                  true,
+		"ifshare routing put":              true,
+		"ifshare key import":               true,
+		"ifshare swarm peering add":        true,
+		"ifshare swarm peering rm":         true,
+		"ifshare swarm peering ls":         true,
+		"ifshare update":                   true,
+		"ifshare swarm stats":              true,
 	}
 	for _, cmd := range node.IPFSCommands() {
 		if _, ok := allowList[cmd]; ok {
@@ -223,7 +223,7 @@ func TestCommandsFlags(t *testing.T) {
 	t.Parallel()
 	node := harness.NewT(t).NewNode()
 	resStr := node.IPFS("commands", "--flags").Stdout.String()
-	assert.Contains(t, resStr, "ipfs pin add --recursive / ipfs pin add -r")
-	assert.Contains(t, resStr, "ipfs id --format / ipfs id -f")
-	assert.Contains(t, resStr, "ipfs repo gc --quiet / ipfs repo gc -q")
+	assert.Contains(t, resStr, "ifshare pin add --recursive / ifshare pin add -r")
+	assert.Contains(t, resStr, "ifshare id --format / ifshare id -f")
+	assert.Contains(t, resStr, "ifshare repo gc --quiet / ifshare repo gc -q")
 }

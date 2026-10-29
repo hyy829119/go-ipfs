@@ -1,5 +1,10 @@
 include mk/header.mk
-IPFS_BIN_$(d) := $(call go-curr-pkg-tgt)
+IPFS_BIN_$(d) := $(d)/ifshare$(?exe)
+
+IFSHARE_INSTALL_DIR := $(shell $(GOCC) env GOBIN)
+ifeq ($(strip $(IFSHARE_INSTALL_DIR)),)
+IFSHARE_INSTALL_DIR := $(firstword $(subst $(PATH_SEP), ,$(GOPATH)))/bin
+endif
 
 TGT_BIN += $(IPFS_BIN_$(d))
 CLEAN += $(IPFS_BIN_$(d))
@@ -20,10 +25,15 @@ $(IPFS_BIN_$(d)): GOFLAGS += $(cmd/ipfs_flags)
 $(IPFS_BIN_$(d)): $(d) $$(DEPS_GO) ALWAYS #| $(DEPS_OO_$(d))
 	$(go-build-relative)
 
-$(d)-install: GOFLAGS += $(cmd/ipfs_flags)
-$(d)-install: $(d) $$(DEPS_GO) ALWAYS 
-	$(GOCC) install $(go-flags-with-tags) ./cmd/ipfs
+$(d)-install: $(IPFS_BIN_$(d))
+	mkdir -p "$(IFSHARE_INSTALL_DIR)"
+	install -m 0755 "$<" "$(IFSHARE_INSTALL_DIR)/$(notdir $<)"
 .PHONY: $(d)-install
+
+# Legacy scripts and sharness tests explicitly request the old binary name.
+$(d)/ipfs$(?exe): $(IPFS_BIN_$(d))
+	cp "$<" "$@"
+CLEAN += $(d)/ipfs$(?exe)
 
 COVER_BIN_$(d) := $(d)/ipfs-test-cover
 CLEAN += $(COVER_BIN_$(d))

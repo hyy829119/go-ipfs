@@ -108,7 +108,7 @@ FOREGROUND MODE (--foreground, -f):
   immediately. Use --foreground to block until interrupted:
 
   - Ctrl+C or SIGTERM: Removes the forwarder and exits
-  - 'ipfs p2p close': Removes the forwarder and exits
+  - 'ifshare p2p close': Removes the forwarder and exits
   - Daemon shutdown: Forwarder is automatically removed
 
   Useful for systemd services or scripts that need cleanup on exit.
@@ -116,10 +116,10 @@ FOREGROUND MODE (--foreground, -f):
 EXAMPLES:
 
   # Persistent forwarder (command returns immediately)
-  ipfs p2p forward /x/myapp /ip4/127.0.0.1/tcp/3000 /p2p/PeerID
+  ifshare p2p forward /x/myapp /ip4/127.0.0.1/tcp/3000 /p2p/PeerID
 
   # Temporary forwarder (removed when command exits)
-  ipfs p2p forward -f /x/myapp /ip4/127.0.0.1/tcp/3000 /p2p/PeerID
+  ifshare p2p forward -f /x/myapp /ip4/127.0.0.1/tcp/3000 /p2p/PeerID
 
 Learn more: https://github.com/ipfs/kubo/blob/master/docs/p2p-tunnels.md
 `,
@@ -263,7 +263,7 @@ var p2pListenCmd = &cmds.Command{
 Create a libp2p protocol handler that forwards incoming connections to
 <target-address>.
 
-When a remote peer connects using 'ipfs p2p forward', the connection is
+When a remote peer connects using 'ifshare p2p forward', the connection is
 forwarded to your local service. Similar to SSH port forwarding (server side).
 
 ARGUMENTS:
@@ -277,7 +277,7 @@ FOREGROUND MODE (--foreground, -f):
   immediately. Use --foreground to block until interrupted:
 
   - Ctrl+C or SIGTERM: Removes the listener and exits
-  - 'ipfs p2p close': Removes the listener and exits
+  - 'ifshare p2p close': Removes the listener and exits
   - Daemon shutdown: Listener is automatically removed
 
   Useful for systemd services or scripts that need cleanup on exit.
@@ -285,13 +285,13 @@ FOREGROUND MODE (--foreground, -f):
 EXAMPLES:
 
   # Persistent listener (command returns immediately)
-  ipfs p2p listen /x/myapp /ip4/127.0.0.1/tcp/3000
+  ifshare p2p listen /x/myapp /ip4/127.0.0.1/tcp/3000
 
   # Temporary listener (removed when command exits)
-  ipfs p2p listen -f /x/myapp /ip4/127.0.0.1/tcp/3000
+  ifshare p2p listen -f /x/myapp /ip4/127.0.0.1/tcp/3000
 
   # Report connecting peer ID to the target application
-  ipfs p2p listen -r /x/myapp /ip4/127.0.0.1/tcp/3000
+  ifshare p2p listen -r /x/myapp /ip4/127.0.0.1/tcp/3000
 
 Learn more: https://github.com/ipfs/kubo/blob/master/docs/p2p-tunnels.md
 `,

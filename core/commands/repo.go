@@ -33,7 +33,7 @@ var RepoCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Manipulate the IPFS repo.",
 		ShortDescription: `
-'ipfs repo' is a plumbing command used to manipulate the repo.
+'ifshare repo' is a plumbing command used to manipulate the repo.
 `,
 	},
 
@@ -65,7 +65,7 @@ var repoGcCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Perform a garbage collection sweep on the repo.",
 		ShortDescription: `
-'ipfs repo gc' is a plumbing command that will sweep the local
+'ifshare repo gc' is a plumbing command that will sweep the local
 set of stored objects and remove ones that are not pinned in
 order to reclaim hard disk space.
 `,
@@ -155,7 +155,7 @@ var repoStatCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Get stats for the currently used repo.",
 		ShortDescription: `
-'ipfs repo stat' provides information about the local set of
+'ifshare repo stat' provides information about the local set of
 stored objects. It outputs:
 
 RepoSize        int Size in bytes that the repo is currently taking.
@@ -371,7 +371,7 @@ var repoVerifyCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Verify all blocks in repo are not corrupted.",
 		ShortDescription: `
-'ipfs repo verify' checks integrity of all blocks in the local datastore.
+'ifshare repo verify' checks integrity of all blocks in the local datastore.
 Each block is read and validated against its CID to ensure data integrity.
 
 Without any flags, this is a SAFE, read-only check that only reports corrupt
@@ -382,9 +382,9 @@ Use --drop to remove corrupt blocks, or --heal to remove and re-fetch from
 the network.
 
 Examples:
-  ipfs repo verify          # safe read-only check, reports corrupt blocks
-  ipfs repo verify --drop   # remove corrupt blocks
-  ipfs repo verify --heal   # remove and re-fetch corrupt blocks
+  ifshare repo verify          # safe read-only check, reports corrupt blocks
+  ifshare repo verify --drop   # remove corrupt blocks
+  ifshare repo verify --heal   # remove and re-fetch corrupt blocks
 
 Exit Codes:
   0: All blocks are valid, OR all corrupt blocks were successfully remediated
@@ -573,7 +573,7 @@ var repoVersionCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Show the repo version.",
 		ShortDescription: `
-'ipfs repo version' returns the current repo version.
+'ifshare repo version' returns the current repo version.
 `,
 	},
 
@@ -593,7 +593,7 @@ var repoVersionCmd = &cmds.Command{
 			if quiet {
 				fmt.Fprintf(w, "fs-repo@%s\n", out.Version)
 			} else {
-				fmt.Fprintf(w, "ipfs repo version fs-repo@%s\n", out.Version)
+				fmt.Fprintf(w, "ifshare repo version fs-repo@%s\n", out.Version)
 			}
 			return nil
 		}),
@@ -604,14 +604,14 @@ var repoMigrateCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Apply repository migrations to a specific version.",
 		ShortDescription: `
-'ipfs repo migrate' applies repository migrations to bring the repository
+'ifshare repo migrate' applies repository migrations to bring the repository
 to a specific version. By default, migrates to the latest version supported
 by this IPFS binary.
 
 Examples:
-  ipfs repo migrate                # Migrate to latest version
-  ipfs repo migrate --to=17       # Migrate to version 17
-  ipfs repo migrate --to=16 --allow-downgrade  # Downgrade to version 16
+  ifshare repo migrate                # Migrate to latest version
+  ifshare repo migrate --to=17       # Migrate to version 17
+  ifshare repo migrate --to=16 --allow-downgrade  # Downgrade to version 16
 
 WARNING: Downgrading a repository may cause data loss and requires using
 an older IPFS binary that supports the target version. After downgrading,

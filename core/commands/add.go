@@ -98,7 +98,7 @@ How quickly other peers can find your content depends on Provide.Strategy:
     the blockstore. Content is discoverable immediately.
 
   Selective strategies (pinned, mfs, pinned+mfs):
-    Only the root CID is announced immediately after 'ipfs add'.
+    Only the root CID is announced immediately after 'ifshare add'.
     Remaining blocks are announced during the next reprovide cycle
     (Provide.DHT.Interval, default 22h).
 
@@ -141,9 +141,9 @@ recursive option) in a directory. This directory contains only
 the files which have been added, and means that the file retains
 its filename. For example:
 
-  > ipfs add example.jpg
+  > ifshare add example.jpg
   added QmbFMke1KXqnYyBBWxB74N4c5SBnJMVAiMNRcGu6x1AwQH example.jpg
-  > ipfs add example.jpg -w
+  > ifshare add example.jpg -w
   added QmbFMke1KXqnYyBBWxB74N4c5SBnJMVAiMNRcGu6x1AwQH example.jpg
   added QmaG4FuMqEBnQNn3C8XJ5bpW8kLs7zq2ZXgHptJHbKDDVx
 
@@ -151,7 +151,7 @@ You can now refer to the added file in a gateway, like so:
 
   /ipfs/QmaG4FuMqEBnQNn3C8XJ5bpW8kLs7zq2ZXgHptJHbKDDVx/example.jpg
 
-Files imported with 'ipfs add' are protected from GC (implicit '--pin=true'),
+Files imported with 'ifshare add' are protected from GC (implicit '--pin=true'),
 but it is up to you to remember the returned CID to get the data back later.
 
 If you need to back up or transport content-addressed data using a non-IPFS
@@ -163,12 +163,12 @@ MFS INTEGRATION:
 Passing '--to-files' creates a reference in Files API (MFS), making it easier
 to find it in the future:
 
-  > ipfs files mkdir -p /myfs/dir
-  > ipfs add example.jpg --to-files /myfs/dir/
-  > ipfs files ls /myfs/dir/
+  > ifshare files mkdir -p /myfs/dir
+  > ifshare add example.jpg --to-files /myfs/dir/
+  > ifshare files ls /myfs/dir/
   example.jpg
 
-See 'ipfs files --help' to learn more about using MFS
+See 'ifshare files --help' to learn more about using MFS
 for keeping track of added files and directories.
 
 SYMLINK HANDLING:
@@ -177,7 +177,7 @@ By default, symbolic links are preserved as UnixFS symlink nodes that store
 the target path. Use --dereference-symlinks to resolve symlinks to their
 target content instead:
 
-  > ipfs add -r --dereference-symlinks ./mydir
+  > ifshare add -r --dereference-symlinks ./mydir
 
 This resolves all symlinks, including CLI arguments and those found inside
 directories. Symlinks to files become regular file content, symlinks to
@@ -208,28 +208,28 @@ The following examples use very small byte sizes to demonstrate the
 properties of the different chunkers on a small file. You'll likely
 want to use a 1024 times larger chunk sizes for most files.
 
-  > ipfs add --chunker=size-2048 ipfs-logo.svg
+  > ifshare add --chunker=size-2048 ipfs-logo.svg
   added QmafrLBfzRLV4XSH1XcaMMeaXEUhDJjmtDfsYU95TrWG87 ipfs-logo.svg
-  > ipfs add --chunker=rabin-512-1024-2048 ipfs-logo.svg
+  > ifshare add --chunker=rabin-512-1024-2048 ipfs-logo.svg
   added Qmf1hDN65tR55Ubh2RN1FPxr69xq3giVBz1KApsresY8Gn ipfs-logo.svg
 
 You can now check what blocks have been created by:
 
-  > ipfs ls QmafrLBfzRLV4XSH1XcaMMeaXEUhDJjmtDfsYU95TrWG87
+  > ifshare ls QmafrLBfzRLV4XSH1XcaMMeaXEUhDJjmtDfsYU95TrWG87
   QmY6yj1GsermExDXoosVE3aSPxdMNYr6aKuw3nA8LoWPRS 2059
   Qmf7ZQeSxq2fJVJbCmgTrLLVN9tDR9Wy5k75DxQKuz5Gyt 1195
-  > ipfs ls Qmf1hDN65tR55Ubh2RN1FPxr69xq3giVBz1KApsresY8Gn
+  > ifshare ls Qmf1hDN65tR55Ubh2RN1FPxr69xq3giVBz1KApsresY8Gn
   QmY6yj1GsermExDXoosVE3aSPxdMNYr6aKuw3nA8LoWPRS 2059
   QmerURi9k4XzKCaaPbsK6BL5pMEjF7PGphjDvkkjDtsVf3 868
   QmQB28iwSriSUSMqG2nXDTLtdPHgWb4rebBrU7Q1j4vxPv 338
 
 ADVANCED CONFIGURATION:
 
-Finally, a note on hash (CID) determinism and 'ipfs add' command.
+Finally, a note on hash (CID) determinism and 'ifshare add' command.
 
 Almost all the flags provided by this command will change the final CID, and
 new flags may be added in the future. It is not guaranteed for the implicit
-defaults of 'ipfs add' to remain the same in future Kubo releases, or for other
+defaults of 'ifshare add' to remain the same in future Kubo releases, or for other
 IPFS software to use the same import parameters as Kubo.
 
 Note: CIDv1 is automatically used when using non-default options like custom

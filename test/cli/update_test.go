@@ -512,7 +512,7 @@ func newMockGitHubReleases(t *testing.T) *httptest.Server {
 	return srv
 }
 
-// copyBuiltBinary copies the built ipfs binary (cmd/ipfs/ipfs) to dst.
+// copyBuiltBinary copies the built ifshare binary (cmd/ipfs/ifshare) to dst.
 // It locates the project root the same way the test harness does.
 func copyBuiltBinary(t *testing.T, dst string) {
 	t.Helper()
@@ -520,11 +520,6 @@ func copyBuiltBinary(t *testing.T, dst string) {
 	// reusing the same project-root lookup the harness already has.
 	h := harness.NewT(t)
 	srcBin := h.IPFSBin
-	// The harness hardcodes "ipfs" without .exe suffix, but on Windows
-	// the built binary is "ipfs.exe".
-	if runtime.GOOS == "windows" && !strings.HasSuffix(srcBin, ".exe") {
-		srcBin += ".exe"
-	}
 	data, err := os.ReadFile(srcBin)
 	require.NoError(t, err, "failed to read built binary at %s (did you run 'make build'?)", srcBin)
 	require.NoError(t, os.MkdirAll(filepath.Dir(dst), 0o755))

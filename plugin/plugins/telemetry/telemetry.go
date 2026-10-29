@@ -421,7 +421,7 @@ Kubo will collect anonymous usage data to help improve the software:
 No data sent yet. To opt-out before collection starts:
 • Set environment: %s=off
 • Or opt out of telemetry in every tool that honors it: %s=1
-• Or run: ipfs config Plugins.Plugins.telemetry.Config.Mode off
+• Or run: ifshare config Plugins.Plugins.telemetry.Config.Mode off
 • Then restart daemon
 
 This message is shown only once.

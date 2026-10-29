@@ -38,36 +38,37 @@ the private key enables publishing new (signed) values. In both publish
 and resolve, the default name used is the node's own PeerID,
 which is the hash of its public key.
 
-You can use the 'ipfs key' commands to list and generate more names and their
+You can use the 'ifshare key' commands to list and generate more names and
+their
 respective keys.
 
 Examples:
 
 Publish an <ipfs-path> with your default name:
 
-  > ipfs name publish /ipfs/bafkreifjjcie6lypi6ny7amxnfftagclbuxndqonfipmb64f2km2devei4
+  > ifshare name publish /ipfs/bafkreifjjcie6lypi6ny7amxnfftagclbuxndqonfipmb64f2km2devei4
   Published to k51qzi5uqu5dgklc20hksmmzhoy5lfrn5xcnryq6xp4r50b5yc0vnivpywfu9p: /ipfs/bafk...
 
-Publish an <ipfs-path> with another name, added by an 'ipfs key' command:
+Publish an <ipfs-path> with another name, added by an 'ifshare key' command:
 
-  > ipfs key gen --type=ed25519 mykey
+  > ifshare key gen --type=ed25519 mykey
   k51qzi5uqu5dlz49qkb657myg6f1buu6rauv8c6b489a9i1e4dkt7a3yo9j2wr
-  > ipfs name publish --key=mykey /ipfs/bafkreifjjcie6lypi6ny7amxnfftagclbuxndqonfipmb64f2km2devei4
+  > ifshare name publish --key=mykey /ipfs/bafkreifjjcie6lypi6ny7amxnfftagclbuxndqonfipmb64f2km2devei4
   Published to k51qzi5uqu5dlz49qkb657myg6f1buu6rauv8c6b489a9i1e4dkt7a3yo9j2wr: /ipfs/bafk...
 
 Resolve the value of your name:
 
-  > ipfs name resolve
+  > ifshare name resolve
   /ipfs/bafk...
 
 Resolve the value of another name:
 
-  > ipfs name resolve k51qzi5uqu5dlz49qkb657myg6f1buu6rauv8c6b489a9i1e4dkt7a3yo9j2wr
+  > ifshare name resolve k51qzi5uqu5dlz49qkb657myg6f1buu6rauv8c6b489a9i1e4dkt7a3yo9j2wr
   /ipfs/bafk...
 
 Resolve the value of a dnslink:
 
-  > ipfs name resolve specs.ipfs.tech
+  > ifshare name resolve specs.ipfs.tech
   /ipfs/bafy...
 
 `,
@@ -120,8 +121,8 @@ Prints values inside of IPNS Record protobuf and its DAG-CBOR Data field.
 
 The input can be a file or STDIN, the output can be JSON:
 
-  $ ipfs routing get "/ipns/$PEERID" > ipns_record
-  $ ipfs name inspect --enc=json < ipns_record
+  $ ifshare routing get "/ipns/$PEERID" > ipns_record
+  $ ifshare name inspect --enc=json < ipns_record
 
 Values in PublicKey, SignatureV1 and SignatureV2 fields are raw bytes encoded
 in Multibase. The Data field is DAG-CBOR represented as DAG-JSON.
@@ -287,16 +288,16 @@ Retrieves the signed IPNS record for a given name from the routing system.
 The output is the raw IPNS record (protobuf) as defined in the IPNS spec:
 https://specs.ipfs.tech/ipns/ipns-record/
 
-The record can be inspected with 'ipfs name inspect':
+The record can be inspected with 'ifshare name inspect':
 
-    ipfs name get <name> | ipfs name inspect
+    ifshare name get <name> | ifshare name inspect
 
-This is equivalent to 'ipfs routing get /ipns/<name>' but only accepts
+This is equivalent to 'ifshare routing get /ipns/<name>' but only accepts
 IPNS names (not arbitrary routing keys).
 
 Note: The routing system returns the "best" IPNS record it knows about.
 For IPNS, "best" means the record with the highest sequence number.
-If multiple records exist (e.g., after using 'ipfs name put'), this command
+If multiple records exist (e.g., after using 'ifshare name put'), this command
 returns the one the routing system considers most current.
 `,
 		HTTP: &cmds.HTTPHelpText{
@@ -350,7 +351,8 @@ This command accepts a raw IPNS record (protobuf) as defined in the IPNS spec:
 https://specs.ipfs.tech/ipns/ipns-record/
 
 The record must be signed by the private key corresponding to the IPNS name.
-Use 'ipfs name get' to retrieve records and 'ipfs name inspect' to examine.
+Use 'ifshare name get' to retrieve records and 'ifshare name inspect' to
+examine.
 `,
 		LongDescription: `
 Stores a pre-signed IPNS record in the routing system.
@@ -359,7 +361,8 @@ This command accepts a raw IPNS record (protobuf) as defined in the IPNS spec:
 https://specs.ipfs.tech/ipns/ipns-record/
 
 The record must be signed by the private key corresponding to the IPNS name.
-Use 'ipfs name get' to retrieve records and 'ipfs name inspect' to examine.
+Use 'ifshare name get' to retrieve records and 'ifshare name inspect' to
+examine.
 
 Use Cases:
 
@@ -400,16 +403,16 @@ Examples:
 
 Export and re-import a record:
 
-  > ipfs name get k51... > record.bin
-  > ipfs name put k51... record.bin
+  > ifshare name get k51... > record.bin
+  > ifshare name put k51... record.bin
 
 Store a record received from someone else:
 
-  > ipfs name put k51... third-party-record.bin
+  > ifshare name put k51... third-party-record.bin
 
 Force store a record to test routing validation:
 
-  > ipfs name put --force k51... possibly-invalid-record.bin
+  > ifshare name put --force k51... possibly-invalid-record.bin
 `,
 		HTTP: &cmds.HTTPHelpText{
 			Description: "Request body should be `multipart/form-data` with the IPNS record bytes.",
@@ -517,7 +520,7 @@ Force store a record to test routing validation:
 						existingSeq, seqErr := existingRec.Sequence()
 						newSeq, newSeqErr := rec.Sequence()
 						if seqErr == nil && newSeqErr == nil && existingSeq >= newSeq {
-							return fmt.Errorf("existing IPNS record has sequence %d >= new record sequence %d, use 'ipfs name put --force' to skip this check", existingSeq, newSeq)
+							return fmt.Errorf("existing IPNS record has sequence %d >= new record sequence %d, use 'ifshare name put --force' to skip this check", existingSeq, newSeq)
 						}
 					}
 				}

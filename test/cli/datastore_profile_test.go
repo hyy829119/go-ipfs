@@ -154,7 +154,7 @@ func TestDatastoreProfileApplyAfterInit(t *testing.T) {
 			res := node.RunIPFS("config", "profile", "apply", profile)
 			require.NotEqual(t, 0, res.ExitCode())
 			assert.Contains(t, res.Stderr.String(), "fixed when the repo is created")
-			assert.Contains(t, res.Stderr.String(), "ipfs init --profile="+profile)
+			assert.Contains(t, res.Stderr.String(), "ifshare init --profile="+profile)
 			assert.Equal(t, before, node.ReadFile("config"))
 
 			res = node.RunIPFS("config", "profile", "apply", "--dry-run", profile)

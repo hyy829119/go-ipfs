@@ -152,11 +152,11 @@ func TestDiagDatastore(t *testing.T) {
 		// Both get and count require repo lock, which is held by the running daemon
 		res := node.RunIPFS("diag", "datastore", "get", "/test")
 		assert.Error(t, res.Err, "get should fail when daemon is running")
-		assert.Contains(t, res.Stderr.String(), "ipfs daemon is running")
+		assert.Contains(t, res.Stderr.String(), "ifshare daemon is running")
 
 		res = node.RunIPFS("diag", "datastore", "count", "/pubsub/seqno/")
 		assert.Error(t, res.Err, "count should fail when daemon is running")
-		assert.Contains(t, res.Stderr.String(), "ipfs daemon is running")
+		assert.Contains(t, res.Stderr.String(), "ifshare daemon is running")
 	})
 
 	t.Run("provider keystore datastores are visible in unified view", func(t *testing.T) {

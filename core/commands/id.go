@@ -24,7 +24,7 @@ import (
 	"github.com/libp2p/go-libp2p/core/protocol"
 )
 
-const offlineIDErrorMessage = "'ipfs id' cannot query information on remote peers without a running daemon; if you only want to convert --peerid-base, pass --offline option"
+const offlineIDErrorMessage = "'ifshare id' cannot query information on remote peers without a running daemon; if you only want to convert --peerid-base, pass --offline option"
 
 type IdOutput struct { // nolint
 	ID           string
@@ -46,7 +46,7 @@ var IDCmd = &cmds.Command{
 Prints out information about the specified peer.
 If no peer is specified, prints out information for local peers.
 
-'ipfs id' supports the format option for output with the following keys:
+'ifshare id' supports the format option for output with the following keys:
 <id> : The peers id.
 <aver>: Agent version.
 <pver>: Protocol version.
@@ -56,7 +56,7 @@ If no peer is specified, prints out information for local peers.
 
 EXAMPLE:
 
-    ipfs id Qmece2RkXhsKe5CRooNisBTh4SK119KrXXGmoK6V3kb8aH -f="<addrs>\n"
+    ifshare id Qmece2RkXhsKe5CRooNisBTh4SK119KrXXGmoK6V3kb8aH -f="<addrs>\n"
 `,
 	},
 	Arguments: []cmds.Argument{

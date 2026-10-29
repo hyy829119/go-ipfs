@@ -10,7 +10,7 @@ import (
 func TestCommandsWithoutRepo(t *testing.T) {
 	t.Run("cid", func(t *testing.T) {
 		t.Run("base32", func(t *testing.T) {
-			cmd := exec.Command("ipfs", "cid", "base32", "QmS4ustL54uo8FzR9455qaxZwuMiUhyvMcX9Ba8nUH4uVv")
+			cmd := exec.Command("ifshare", "cid", "base32", "QmS4ustL54uo8FzR9455qaxZwuMiUhyvMcX9Ba8nUH4uVv")
 			cmd.Env = append(os.Environ(), "IPFS_PATH="+t.TempDir())
 			stdout, err := cmd.Output()
 			if err != nil {
@@ -23,7 +23,7 @@ func TestCommandsWithoutRepo(t *testing.T) {
 		})
 
 		t.Run("format", func(t *testing.T) {
-			cmd := exec.Command("ipfs", "cid", "format", "-v", "1", "QmS4ustL54uo8FzR9455qaxZwuMiUhyvMcX9Ba8nUH4uVv")
+			cmd := exec.Command("ifshare", "cid", "format", "-v", "1", "QmS4ustL54uo8FzR9455qaxZwuMiUhyvMcX9Ba8nUH4uVv")
 			cmd.Env = append(os.Environ(), "IPFS_PATH="+t.TempDir())
 			stdout, err := cmd.Output()
 			if err != nil {
@@ -36,7 +36,7 @@ func TestCommandsWithoutRepo(t *testing.T) {
 		})
 
 		t.Run("bases", func(t *testing.T) {
-			cmd := exec.Command("ipfs", "cid", "bases")
+			cmd := exec.Command("ifshare", "cid", "bases")
 			cmd.Env = append(os.Environ(), "IPFS_PATH="+t.TempDir())
 			stdout, err := cmd.Output()
 			if err != nil {
@@ -48,7 +48,7 @@ func TestCommandsWithoutRepo(t *testing.T) {
 		})
 
 		t.Run("codecs", func(t *testing.T) {
-			cmd := exec.Command("ipfs", "cid", "codecs")
+			cmd := exec.Command("ifshare", "cid", "codecs")
 			cmd.Env = append(os.Environ(), "IPFS_PATH="+t.TempDir())
 			stdout, err := cmd.Output()
 			if err != nil {
@@ -60,7 +60,7 @@ func TestCommandsWithoutRepo(t *testing.T) {
 		})
 
 		t.Run("hashes", func(t *testing.T) {
-			cmd := exec.Command("ipfs", "cid", "hashes")
+			cmd := exec.Command("ifshare", "cid", "hashes")
 			cmd.Env = append(os.Environ(), "IPFS_PATH="+t.TempDir())
 			stdout, err := cmd.Output()
 			if err != nil {
@@ -74,7 +74,7 @@ func TestCommandsWithoutRepo(t *testing.T) {
 
 	t.Run("multibase", func(t *testing.T) {
 		t.Run("list", func(t *testing.T) {
-			cmd := exec.Command("ipfs", "multibase", "list")
+			cmd := exec.Command("ifshare", "multibase", "list")
 			cmd.Env = append(os.Environ(), "IPFS_PATH="+t.TempDir())
 			stdout, err := cmd.Output()
 			if err != nil {
@@ -86,7 +86,7 @@ func TestCommandsWithoutRepo(t *testing.T) {
 		})
 
 		t.Run("encode", func(t *testing.T) {
-			cmd := exec.Command("ipfs", "multibase", "encode", "-b", "base32")
+			cmd := exec.Command("ifshare", "multibase", "encode", "-b", "base32")
 			cmd.Env = append(os.Environ(), "IPFS_PATH="+t.TempDir())
 			cmd.Stdin = strings.NewReader("hello\n")
 			stdout, err := cmd.Output()
@@ -100,7 +100,7 @@ func TestCommandsWithoutRepo(t *testing.T) {
 		})
 
 		t.Run("decode", func(t *testing.T) {
-			cmd := exec.Command("ipfs", "multibase", "decode")
+			cmd := exec.Command("ifshare", "multibase", "decode")
 			cmd.Env = append(os.Environ(), "IPFS_PATH="+t.TempDir())
 			cmd.Stdin = strings.NewReader("bnbswy3dpbi")
 			stdout, err := cmd.Output()
@@ -114,7 +114,7 @@ func TestCommandsWithoutRepo(t *testing.T) {
 		})
 
 		t.Run("transcode", func(t *testing.T) {
-			cmd := exec.Command("ipfs", "multibase", "transcode", "-b", "base64")
+			cmd := exec.Command("ifshare", "multibase", "transcode", "-b", "base64")
 			cmd.Env = append(os.Environ(), "IPFS_PATH="+t.TempDir())
 			cmd.Stdin = strings.NewReader("bnbswy3dpbi")
 			stdout, err := cmd.Output()

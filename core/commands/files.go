@@ -71,7 +71,7 @@ func updateNoFlushCounter(nd *core.IpfsNode, flush bool) error {
 	// Check if limit reached
 	if noFlushLimit > 0 && noFlushOperationCounter.Load() >= noFlushLimit {
 		return fmt.Errorf("reached limit of %d unflushed MFS operations. "+
-			"To resolve: 1) run 'ipfs files flush' to persist changes, "+
+			"To resolve: 1) run 'ifshare files flush' to persist changes, "+
 			"2) use --flush=true (default), or "+
 			"3) increase Internal.MFSNoFlushLimit in config", noFlushLimit)
 	}
@@ -100,32 +100,37 @@ filesystem.
 
 The files facility interacts with MFS (Mutable File System). MFS acts as a
 single, dynamic filesystem mount. MFS has a root CID that is transparently
-updated when a change happens (and can be checked with "ipfs files stat /").
+updated when a change happens (and can be checked with "ifshare files stat
+/").
 
 All files and folders within MFS are respected and will not be deleted
 during garbage collections. However, a DAG may be referenced in MFS without
 being fully available locally (MFS content is lazy loaded when accessed).
-MFS is independent from the list of pinned items ("ipfs pin ls"). Calls to
-"ipfs pin add" and "ipfs pin rm" will add and remove pins independently of
+MFS is independent from the list of pinned items ("ifshare pin ls"). Calls to
+"ifshare pin add" and "ifshare pin rm" will add and remove pins
+independently of
 MFS. If MFS content that was additionally pinned is removed by calling
-"ipfs files rm", it will still remain pinned.
+"ifshare files rm", it will still remain pinned.
 
-Content added with "ipfs add" (which by default also becomes pinned), is not
+Content added with "ifshare add" (which by default also becomes pinned), is
+not
 added to MFS. Any content can be lazily referenced from MFS with the command
-"ipfs files cp /ipfs/<cid> /some/path/" (see ipfs files cp --help).
+"ifshare files cp /ipfs/<cid> /some/path/" (see ifshare files cp --help).
 
-NOTE: Most of the subcommands of 'ipfs files' accept the '--flush' flag. It
+NOTE: Most of the subcommands of 'ifshare files' accept the '--flush' flag. It
 defaults to true and ensures two things: 1) that the changes are reflected in
 the full MFS structure (updated CIDs) 2) that the parent-folder's cache is
 cleared. Use caution when setting this flag to false. It will improve
 performance for large numbers of file operations, but it does so at the cost
 of consistency guarantees. If the daemon is unexpectedly killed before running
-'ipfs files flush' on the files in question, then data may be lost. This also
-applies to run 'ipfs repo gc' concurrently with '--flush=false' operations.
+'ifshare files flush' on the files in question, then data may be lost. This
+also
+applies to run 'ifshare repo gc' concurrently with '--flush=false' operations.
 
 When using '--flush=false', operations are limited to prevent unbounded
 memory growth. After reaching Internal.MFSNoFlushLimit operations, further
-operations will fail until you run 'ipfs files flush'. This explicit failure
+operations will fail until you run 'ifshare files flush'. This explicit
+failure
 (instead of auto-flushing) ensures you maintain control over when data is
 persisted, preventing unexpected partial states and making batch operations
 predictable. We recommend flushing paths regularly, especially folders with
@@ -468,7 +473,7 @@ var filesCpCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Add references to IPFS files and directories in MFS (or copy within MFS).",
 		ShortDescription: `
-"ipfs files cp" can be used to add references to any IPFS file or directory
+"ifshare files cp" can be used to add references to any IPFS file or directory
 (usually in the form /ipfs/<CID>, but also any resolvable path) into MFS.
 This performs a lazy copy: the full DAG will not be fetched, only the root
 node being copied.
@@ -476,19 +481,20 @@ node being copied.
 It can also be used to copy files within MFS, but in the case when an
 IPFS-path matches an existing MFS path, the IPFS path wins.
 
-In order to add content to MFS from disk, you can use "ipfs add" to obtain the
-IPFS Content Identifier and then "ipfs files cp" to copy it into MFS:
+In order to add content to MFS from disk, you can use "ifshare add" to
+obtain the
+IPFS Content Identifier and then "ifshare files cp" to copy it into MFS:
 
-$ ipfs add --quieter --pin=false <your file>
+$ ifshare add --quieter --pin=false <your file>
 # ...
 # ... outputs the root CID at the end
-$ ipfs files cp /ipfs/<CID> /your/desired/mfs/path
+$ ifshare files cp /ipfs/<CID> /your/desired/mfs/path
 
 If you wish to fully copy content from a different IPFS peer into MFS, do not
 forget to force IPFS to fetch the full DAG after doing a "cp" operation. i.e:
 
-$ ipfs files cp /ipfs/<CID> /your/desired/mfs/path
-$ ipfs pin add <CID>
+$ ifshare files cp /ipfs/<CID> /your/desired/mfs/path
+$ ifshare pin add <CID>
 
 The lazy-copy feature can also be used to protect partial DAG contents from
 garbage collection. i.e. adding the Wikipedia root to MFS would not download
@@ -682,7 +688,7 @@ List directories in the local mutable namespace (works on both IPFS and MFS path
 
 Examples:
 
-    $ ipfs files ls /welcome/docs/
+    $ ifshare files ls /welcome/docs/
     about
     contact
     help
@@ -690,7 +696,7 @@ Examples:
     readme
     security-notes
 
-    $ ipfs files ls /myfiles/a/b/c/d
+    $ ifshare files ls /myfiles/a/b/c/d
     foo
     bar
 `,
@@ -818,7 +824,7 @@ it will read the entire file similar to the Unix cat.
 
 Examples:
 
-    $ ipfs files read /test/hello
+    $ ifshare files read /test/hello
     hello
 	`,
 	},
@@ -910,7 +916,7 @@ Move files around. Just like the traditional Unix mv.
 
 Example:
 
-    $ ipfs files mv /myfs/a/b/c /myfs/foo/newc
+    $ ifshare files mv /myfs/a/b/c /myfs/foo/newc
 
 `,
 	},
@@ -982,7 +988,7 @@ var filesWriteCmd = &cmds.Command{
 		Tagline: "Append to (modify) a file in MFS.",
 		ShortDescription: `
 A low-level MFS command that allows you to append data to a file. If you want
-to add a file without modifying an existing one, use 'ipfs add --to-files'
+to add a file without modifying an existing one, use 'ifshare add --to-files'
 instead.
 `,
 		LongDescription: `
@@ -1007,34 +1013,34 @@ of writes to a deeper directory structure.
 
 EXAMPLE:
 
-    echo "hello world" | ipfs files write --create --parents /myfs/a/b/file
-    echo "hello world" | ipfs files write --truncate /myfs/a/b/file
+    echo "hello world" | ifshare files write --create --parents /myfs/a/b/file
+    echo "hello world" | ifshare files write --truncate /myfs/a/b/file
 
 WARNING:
 
 Usage of the '--flush=false' option does not guarantee data durability until
-the tree has been flushed. This can be accomplished by running 'ipfs files
+the tree has been flushed. This can be accomplished by running 'ifshare files
 stat' on the file or any of its ancestors.
 
 WARNING:
 
-The CID produced by 'files write' will be different from 'ipfs add' because
-'ipfs files write' creates a trickle-dag optimized for append-only operations.
-See '--trickle' in 'ipfs add --help' for more information.
+The CID produced by 'files write' will be different from 'ifshare add' because
+'ifshare files write' creates a trickle-dag optimized for append-only operations.
+See '--trickle' in 'ifshare add --help' for more information.
 
 NOTE: The 'Import.UnixFSFileMaxLinks' config option does not apply to this command.
 Trickle DAG has a fixed internal structure optimized for append operations.
-To use configurable max-links, use 'ipfs add' with balanced DAG layout.
+To use configurable max-links, use 'ifshare add' with balanced DAG layout.
 
 If you want to add a file without modifying an existing one,
-use 'ipfs add' with '--to-files':
+use 'ifshare add' with '--to-files':
 
-  > ipfs files mkdir -p /myfs/dir
-  > ipfs add example.jpg --to-files /myfs/dir/
-  > ipfs files ls /myfs/dir/
+  > ifshare files mkdir -p /myfs/dir
+  > ifshare add example.jpg --to-files /myfs/dir/
+  > ifshare files ls /myfs/dir/
   example.jpg
 
-See '--to-files' in 'ipfs add --help' for more information.
+See '--to-files' in 'ifshare add --help' for more information.
 `,
 	},
 	Arguments: []cmds.Argument{
@@ -1185,8 +1191,8 @@ NOTE: All paths must be absolute.
 
 Examples:
 
-    $ ipfs files mkdir /test/newdir
-    $ ipfs files mkdir -p /test/does/not/exist/yet
+    $ ifshare files mkdir /test/newdir
+    $ ifshare files mkdir -p /test/does/not/exist/yet
 `,
 	},
 
@@ -1294,7 +1300,7 @@ Change the CID version or hash function of the root node of a given path.
 
 Note: the MFS root ('/') CID format is controlled by Import.CidVersion and
 Import.HashFunction in the config and cannot be changed with this command.
-Use 'ipfs config' to modify these values instead. This command only works
+Use 'ifshare config' to modify these values instead. This command only works
 on subdirectories of the MFS root.
 `,
 	},
@@ -1315,7 +1321,7 @@ on subdirectories of the MFS root.
 		path := req.Arguments[0]
 		if path == "/" {
 			return fmt.Errorf("cannot change CID format of the MFS root; " +
-				"use 'ipfs config Import.CidVersion' and 'ipfs config Import.HashFunction' instead")
+				"use 'ifshare config Import.CidVersion' and 'ifshare config Import.HashFunction' instead")
 		}
 
 		flush, _ := req.Options[filesFlushOptionName].(bool)
@@ -1370,12 +1376,12 @@ var filesRmCmd = &cmds.Command{
 		ShortDescription: `
 Remove files or directories.
 
-    $ ipfs files rm /foo
-    $ ipfs files ls /bar
+    $ ifshare files rm /foo
+    $ ifshare files ls /bar
     cat
     dog
     fish
-    $ ipfs files rm -r /bar
+    $ ifshare files rm -r /bar
 `,
 	},
 
@@ -1613,8 +1619,8 @@ var filesChmodCmd = &cmds.Command{
 		ShortDescription: `
 The mode argument must be specified in Unix numeric notation.
 
-    $ ipfs files chmod 0644 /foo
-    $ ipfs files stat /foo
+    $ ifshare files chmod 0644 /foo
+    $ ifshare files stat /foo
     ...
     Type: file
     Mode: -rw-r--r-- (0644)
@@ -1653,9 +1659,9 @@ var filesTouchCmd = &cmds.Command{
 		ShortDescription: `
 Examples:
     # set modification time to now.
-    $ ipfs files touch /foo
+    $ ifshare files touch /foo
     # set a custom modification time.
-    $ ipfs files touch --mtime=1630937926 /foo
+    $ ifshare files touch --mtime=1630937926 /foo
 `,
 	},
 	Arguments: []cmds.Argument{
@@ -1698,7 +1704,7 @@ var filesChrootCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Change the MFS root CID.",
 		ShortDescription: `
-'ipfs files chroot' changes the root CID used by MFS (Mutable File System).
+'ifshare files chroot' changes the root CID used by MFS (Mutable File System).
 This is a recovery command for when MFS becomes corrupted and prevents the
 daemon from starting.
 
@@ -1712,10 +1718,10 @@ This command can only run when the daemon is not running.
 Examples:
 
   # Reset MFS to empty directory (recovery from corruption)
-  $ ipfs files chroot --confirm
+  $ ifshare files chroot --confirm
 
   # Restore MFS to a known good directory CID
-  $ ipfs files chroot --confirm QmYourBackupCID
+  $ ifshare files chroot --confirm QmYourBackupCID
 `,
 	},
 	Arguments: []cmds.Argument{
@@ -1773,7 +1779,7 @@ Examples:
 			// Special case: empty dir is always available (hardcoded in boxo)
 			emptyDirCid := ft.EmptyDirNode().Cid()
 			if !newRootCid.Equals(emptyDirCid) {
-				return fmt.Errorf("new root %s does not exist locally; fetch it first with 'ipfs block get'", enc.Encode(newRootCid))
+				return fmt.Errorf("new root %s does not exist locally; fetch it first with 'ifshare block get'", enc.Encode(newRootCid))
 			}
 		}
 

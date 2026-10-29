@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -53,7 +54,10 @@ func New(options ...func(h *Harness)) *Harness {
 		panic("unable to find root dir")
 	}
 	rootDir := filepath.Dir(goMod)
-	h.IPFSBin = filepath.Join(rootDir, "cmd", "ipfs", "ipfs")
+	h.IPFSBin = filepath.Join(rootDir, "cmd", "ipfs", "ifshare")
+	if runtime.GOOS == "windows" {
+		h.IPFSBin += ".exe"
+	}
 
 	// setup working dir
 	tmpDir, err := os.MkdirTemp("", "")

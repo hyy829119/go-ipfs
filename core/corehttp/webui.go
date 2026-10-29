@@ -167,7 +167,7 @@ func (h *webUIHandler) writeNotAvailableError(w http.ResponseWriter) {
 WebUI at %s is not in your local node due to Gateway.NoFetch=true.
 
 To use the WebUI, either:
-1. Run: ipfs pin add --progress --name ipfs-webui %s
-2. Download from https://github.com/ipfs/ipfs-webui/releases and import with: ipfs dag import ipfs-webui.car
+1. Run: ifshare pin add --progress --name ipfs-webui %s
+2. Download from https://github.com/ipfs/ipfs-webui/releases and import with: ifshare dag import ipfs-webui.car
 `, WebUIPath, WebUIPath)
 }

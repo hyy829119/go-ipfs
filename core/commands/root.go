@@ -16,7 +16,7 @@ import (
 var log = logging.Logger("core/commands")
 
 var (
-	ErrNotOnline       = errors.New("this command must be run in online mode. Try running 'ipfs daemon' first")
+	ErrNotOnline       = errors.New("this command must be run in online mode. Try running 'ifshare daemon' first")
 	ErrSelfUnsupported = errors.New("finding your own node in the DHT is currently not supported")
 )
 
@@ -34,10 +34,10 @@ const (
 var Root = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline:  "Global p2p merkle-dag filesystem.",
-		Synopsis: "ipfs [--config=<config> | -c] [--debug | -D] [--help] [-h] [--api=<api>] [--offline] [--cid-base=<base>] [--upgrade-cidv0-in-output] [--encoding=<encoding> | --enc] [--timeout=<timeout>] <command> ...",
+		Synopsis: "ifshare [--config=<config> | -c] [--debug | -D] [--help] [-h] [--api=<api>] [--offline] [--cid-base=<base>] [--upgrade-cidv0-in-output] [--encoding=<encoding> | --enc] [--timeout=<timeout>] <command> ...",
 		Subcommands: `
 BASIC COMMANDS
-  init          Initialize local IPFS configuration
+  init          Initialize local ifshare configuration
   add <path>    Add a file to IPFS
   cat <ref>     Show IPFS object data
   get <ref>     Download IPFS objects
@@ -79,15 +79,15 @@ NETWORK COMMANDS
 
 TOOL COMMANDS
   config        Manage configuration
-  version       Show IPFS version information
+  version       Show ifshare version information
   diag          Generate diagnostic reports
   update        Update Kubo to a different version
   commands      List all available commands
   log           Manage and show logs of running daemon
 
-Use 'ipfs <command> --help' to learn more about each command.
+Use 'ifshare <command> --help' to learn more about each command.
 
-ipfs uses a repository in the local file system. By default, the repo is
+ifshare uses a repository in the local file system. By default, the repo is
 located at ~/.ipfs. To change the repo location, set the $IPFS_PATH
 environment variable:
 

@@ -168,7 +168,7 @@ https://github.com/ipfs/kubo/blob/master/docs/datastores.md#flatfs
 https://github.com/ipfs/kubo/blob/master/docs/datastores.md#levelds
 
 NOTE: This profile may only be applied when first initializing node at IPFS_PATH
-      via 'ipfs init --profile flatfs-levelds'
+      via 'ifshare init --profile flatfs-levelds'
 `,
 
 		InitOnly: true,
@@ -182,7 +182,7 @@ NOTE: This profile may only be applied when first initializing node at IPFS_PATH
 everything else in leveldb. See 'flatfs-levelds' for details.
 
 NOTE: This profile may only be applied when first initializing node at IPFS_PATH
-      via 'ipfs init --profile flatfs'
+      via 'ifshare init --profile flatfs'
 `,
 
 		InitOnly: true,
@@ -199,7 +199,7 @@ The wrapper adds overhead to every datastore call. Use it for debugging,
 right-sizing, and testing.
 
 NOTE: This profile may only be applied when first initializing node at IPFS_PATH
-      via 'ipfs init --profile flatfs-levelds-measure'
+      via 'ifshare init --profile flatfs-levelds-measure'
 `,
 
 		InitOnly: true,
@@ -212,7 +212,7 @@ NOTE: This profile may only be applied when first initializing node at IPFS_PATH
 		Description: `Alias of 'flatfs-levelds-measure'.
 
 NOTE: This profile may only be applied when first initializing node at IPFS_PATH
-      via 'ipfs init --profile flatfs-measure'
+      via 'ifshare init --profile flatfs-measure'
 `,
 
 		InitOnly: true,
@@ -243,7 +243,7 @@ https://github.com/ipfs/kubo/blob/master/docs/datastores.md#flatfs
 https://github.com/ipfs/kubo/blob/master/docs/datastores.md#pebbleds
 
 NOTE: This profile may only be applied when first initializing node at IPFS_PATH
-      via 'ipfs init --profile flatfs-pebbleds'
+      via 'ifshare init --profile flatfs-pebbleds'
 `,
 
 		InitOnly: true,
@@ -260,7 +260,7 @@ The wrapper adds overhead to every datastore call. Use it for debugging,
 right-sizing, and testing.
 
 NOTE: This profile may only be applied when first initializing node at IPFS_PATH
-      via 'ipfs init --profile flatfs-pebbleds-measure'
+      via 'ifshare init --profile flatfs-pebbleds-measure'
 `,
 
 		InitOnly: true,
@@ -288,7 +288,7 @@ See configuration documentation at:
 https://github.com/ipfs/kubo/blob/master/docs/datastores.md#pebbleds
 
 NOTE: This profile may only be applied when first initializing node at IPFS_PATH
-      via 'ipfs init --profile pebbleds'
+      via 'ifshare init --profile pebbleds'
 `,
 
 		InitOnly: true,
@@ -305,7 +305,7 @@ The wrapper adds overhead to every datastore call. Use it for debugging,
 right-sizing, and testing.
 
 NOTE: This profile may only be applied when first initializing node at IPFS_PATH
-      via 'ipfs init --profile pebbleds-measure'
+      via 'ifshare init --profile pebbleds-measure'
 `,
 
 		InitOnly: true,
@@ -332,8 +332,8 @@ Other caveats:
 * Good for medium-size datastores, but may run into performance issues
   if your dataset is bigger than a terabyte.
 
-To migrate: create a new IPFS_PATH with 'ipfs init --profile=flatfs',
-move pinned data via 'ipfs dag export/import' or 'ipfs pin ls -t recursive|add',
+To migrate: create a new IPFS_PATH with 'ifshare init --profile=flatfs',
+move pinned data via 'ifshare dag export/import' or 'ifshare pin ls -t recursive|add',
 and decommission the old badger-based node.
 When it comes to block storage, use experimental 'pebbleds' only if you are sure
 modern 'flatfs' does not serve your use case (most users will be perfectly fine
@@ -344,7 +344,7 @@ See configuration documentation at:
 https://github.com/ipfs/kubo/blob/master/docs/datastores.md#badgerds
 
 NOTE: This profile may only be applied when first initializing node at IPFS_PATH
-      via 'ipfs init --profile badgerds'
+      via 'ifshare init --profile badgerds'
 `,
 
 		InitOnly: true,
@@ -361,7 +361,7 @@ The wrapper adds overhead to every datastore call. Use it for debugging,
 right-sizing, and testing.
 
 NOTE: This profile may only be applied when first initializing node at IPFS_PATH
-      via 'ipfs init --profile badgerds-measure'
+      via 'ifshare init --profile badgerds-measure'
 `,
 
 		InitOnly: true,

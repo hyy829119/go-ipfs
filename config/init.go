@@ -35,8 +35,13 @@ func InitWithIdentity(identity Identity) (*Config, error) {
 		Addresses: addressesConfig(),
 
 		Datastore: datastore,
-		Bootstrap: []string{AutoPlaceholder},
-		Identity:  identity,
+		Bootstrap: []string{},
+		// New repositories use operator-supplied peers and endpoints.
+		// The autoconf-on profile restores automatic network configuration.
+		AutoConf: AutoConf{
+			Enabled: False,
+		},
+		Identity: identity,
 		Discovery: Discovery{
 			MDNS: MDNS{
 				Enabled: true,
@@ -52,7 +57,7 @@ func InitWithIdentity(identity Identity) (*Config, error) {
 
 		Ipns: Ipns{
 			ResolveCacheSize:    128,
-			DelegatedPublishers: []string{AutoPlaceholder},
+			DelegatedPublishers: []string{},
 		},
 
 		Gateway: Gateway{
@@ -64,12 +69,10 @@ func InitWithIdentity(identity Identity) (*Config, error) {
 			RemoteServices: map[string]RemotePinningService{},
 		},
 		DNS: DNS{
-			Resolvers: map[string]string{
-				".": AutoPlaceholder,
-			},
+			Resolvers: map[string]string{},
 		},
 		Routing: Routing{
-			DelegatedRouters: []string{AutoPlaceholder},
+			DelegatedRouters: []string{},
 		},
 	}
 

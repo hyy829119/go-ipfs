@@ -72,7 +72,8 @@ modification time in a format similar to Unix 'ls -l':
   <mode> <cid> <size> <mtime> <name>
 
 Mode and mtime are optional UnixFS metadata. They are only present if the
-content was imported with 'ipfs add --preserve-mode' and '--preserve-mtime'.
+content was imported with 'ifshare add --preserve-mode' and
+'--preserve-mtime'.
 Without preserved metadata, both mode and mtime display '-'. Times are in UTC.
 
 Example with --long and preserved metadata:
@@ -95,8 +96,8 @@ first. Directories are treated as having size 0. This is incompatible with
 
 Examples:
 
-  ipfs ls --human <CID>
-  ipfs ls --sort-size <CID>
+  ifshare ls --human <CID>
+  ifshare ls --sort-size <CID>
 
 The JSON output contains type information.
 `,

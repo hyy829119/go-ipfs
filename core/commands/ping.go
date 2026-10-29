@@ -36,7 +36,7 @@ var PingCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Send echo request packets to IPFS hosts.",
 		ShortDescription: `
-'ipfs ping' is a tool to test sending data to other nodes. It finds nodes
+'ifshare ping' is a tool to test sending data to other nodes. It finds nodes
 via the routing system, sends pings, waits for pongs, and prints out round-
 trip latency information.
 		`,

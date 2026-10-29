@@ -342,13 +342,13 @@ func TestExtractBinaryFromArchive(t *testing.T) {
 		archive := makeTarGz(t, "wrong-path/ipfs", []byte("binary"))
 
 		_, err := extractBinaryFromArchive(archive)
-		assert.ErrorContains(t, err, "could not find ipfs binary")
+		assert.ErrorContains(t, err, "could not find ifshare binary")
 	})
 
 	t.Run("rejects non-archive data", func(t *testing.T) {
 		t.Parallel()
 		_, err := extractBinaryFromArchive([]byte("not an archive"))
-		assert.ErrorContains(t, err, "could not find ipfs binary")
+		assert.ErrorContains(t, err, "could not find ifshare binary")
 	})
 }
 

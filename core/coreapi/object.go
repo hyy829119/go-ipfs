@@ -77,7 +77,7 @@ func (api *ObjectAPI) AddLink(ctx context.Context, base path.Path, name string, 
 		case ft.THAMTShard:
 			return path.ImmutablePath{}, fmt.Errorf(
 				"cannot add links to a HAMTShard at the dag-pb level " +
-					"(would corrupt the HAMT bitfield); use 'ipfs files' " +
+					"(would corrupt the HAMT bitfield); use 'ifshare files' " +
 					"commands instead, or pass --allow-non-unixfs to override")
 		default:
 			return path.ImmutablePath{}, fmt.Errorf(
@@ -145,7 +145,7 @@ func (api *ObjectAPI) RmLink(ctx context.Context, base path.Path, link string, o
 		case ft.THAMTShard:
 			return path.ImmutablePath{}, fmt.Errorf(
 				"cannot remove links from a HAMTShard at the dag-pb level " +
-					"(would corrupt the HAMT bitfield); use 'ipfs files rm' " +
+					"(would corrupt the HAMT bitfield); use 'ifshare files rm' " +
 					"instead, or pass --allow-non-unixfs to override")
 		default:
 			return path.ImmutablePath{}, fmt.Errorf(

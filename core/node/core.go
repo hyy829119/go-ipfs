@@ -287,7 +287,7 @@ func Files(strategy string) func(mctx helpers.MetricsCtx, lc fx.Lifecycle, repo 
 		root, err := mfs.NewRoot(ctx, dag, nd, pf, prov, mfsOpts...)
 		if err != nil {
 			return nil, fmt.Errorf("failed to initialize MFS root from %s stored at %s: %w. "+
-				"If corrupted, use 'ipfs files chroot' to reset (see --help)", nd.Cid(), FilesRootDatastoreKey, err)
+				"If corrupted, use 'ifshare files chroot' to reset (see --help)", nd.Cid(), FilesRootDatastoreKey, err)
 		}
 
 		lc.Append(fx.Hook{

@@ -32,10 +32,10 @@ var DagCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Interact with IPLD DAG objects.",
 		ShortDescription: `
-'ipfs dag' is used for creating and manipulating DAG objects/hierarchies.
+'ifshare dag' is used for creating and manipulating DAG objects/hierarchies.
 
 This subcommand is intended to deprecate and replace
-the existing 'ipfs object' command moving forward.
+the existing 'ifshare object' command moving forward.
 `,
 	},
 	Subcommands: map[string]*cmds.Command{
@@ -81,7 +81,7 @@ var DagPutCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Add a DAG node to IPFS.",
 		ShortDescription: `
-'ipfs dag put' accepts input from a file or stdin and parses it
+'ifshare dag put' accepts input from a file or stdin and parses it
 into an object of the specified format.
 `,
 	},
@@ -114,7 +114,7 @@ var DagGetCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Get a DAG node from IPFS.",
 		ShortDescription: `
-'ipfs dag get' fetches a DAG node from IPFS and prints it out in the specified
+'ifshare dag get' fetches a DAG node from IPFS and prints it out in the specified
 format.
 `,
 	},
@@ -132,7 +132,7 @@ var DagResolveCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Resolve IPLD block.",
 		ShortDescription: `
-'ipfs dag resolve' fetches a DAG node from IPFS, prints its address and remaining path.
+'ifshare dag resolve' fetches a DAG node from IPFS, prints its address and remaining path.
 `,
 	},
 	Arguments: []cmds.Argument{
@@ -177,7 +177,7 @@ var DagImportCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Import the contents of .car files",
 		ShortDescription: `
-'ipfs dag import' imports all blocks present in supplied .car
+'ifshare dag import' imports all blocks present in supplied .car
 ( Content Address aRchive ) files, recursively pinning any roots
 specified in the CAR file headers, unless --pin-roots is set to false.
 
@@ -279,7 +279,8 @@ var DagExportCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Streams the selected DAG as a .car stream on stdout.",
 		ShortDescription: `
-'ipfs dag export' fetches a DAG and streams it out as a well-formed .car file.
+'ifshare dag export' fetches a DAG and streams it out as a well-formed .car
+file.
 Note that at present only single root selections / .car files are supported.
 The output of blocks happens in strict DAG-traversal, first-seen, order.
 CAR file follows the CARv1 format: https://ipld.io/specs/transport/car/carv1/
@@ -353,7 +354,7 @@ var DagStatCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Gets stats for a DAG.",
 		ShortDescription: `
-'ipfs dag stat' fetches a DAG and returns various statistics about it.
+'ifshare dag stat' fetches a DAG and returns various statistics about it.
 Statistics include size and number of blocks.
 
 Note: This command skips duplicate blocks in reporting both size and the number of blocks

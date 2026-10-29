@@ -66,6 +66,25 @@ func TestAutoConfProfile(t *testing.T) {
 	assert.Equal(t, DefaultAutoConfURL, cfg.AutoConf.URL.WithDefault(DefaultAutoConfURL))
 }
 
+func TestInitWithoutAutoValues(t *testing.T) {
+	cfg, err := InitWithIdentity(Identity{PeerID: "QmTest"})
+	require.NoError(t, err)
+
+	assert.Equal(t, []string{}, cfg.Bootstrap)
+	assert.Equal(t, map[string]string{}, cfg.DNS.Resolvers)
+	assert.Equal(t, []string{}, cfg.Routing.DelegatedRouters)
+	assert.Equal(t, []string{}, cfg.Ipns.DelegatedPublishers)
+	assert.False(t, cfg.AutoConf.Enabled.WithDefault(DefaultAutoConfEnabled))
+	assert.NoError(t, ValidateAutoConfWithRepo(cfg, false))
+	assert.NoError(t, ValidateAutoConfWithRepo(cfg, true))
+
+	// Resolving the defaults must not reintroduce public fallback endpoints.
+	assert.Empty(t, cfg.BootstrapWithAutoConf())
+	assert.Empty(t, cfg.DNSResolversWithAutoConf())
+	assert.Empty(t, cfg.DelegatedRoutersWithAutoConf())
+	assert.Empty(t, cfg.DelegatedPublishersWithAutoConf())
+}
+
 func TestInitWithAutoValues(t *testing.T) {
 	identity := Identity{
 		PeerID: "QmTest",
@@ -73,6 +92,7 @@ func TestInitWithAutoValues(t *testing.T) {
 
 	cfg, err := InitWithIdentity(identity)
 	require.NoError(t, err)
+	require.NoError(t, Profiles["autoconf-on"].Transform(cfg))
 
 	// Check that Bootstrap is set to "auto"
 	assert.Equal(t, []string{AutoPlaceholder}, cfg.Bootstrap)

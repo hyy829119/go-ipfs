@@ -36,15 +36,16 @@ var KeyCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Create and list IPNS name keypairs",
 		ShortDescription: `
-'ipfs key gen' generates a new keypair for usage with IPNS and 'ipfs name
+'ifshare key gen' generates a new keypair for usage with IPNS and 'ifshare
+name
 publish'.
 
-  > ipfs key gen --type=rsa --size=2048 mykey
-  > ipfs name publish --key=mykey QmSomeHash
+  > ifshare key gen --type=rsa --size=2048 mykey
+  > ifshare name publish --key=mykey QmSomeHash
 
-'ipfs key ls' lists the available keys.
+'ifshare key ls' lists the available keys.
 
-  > ipfs key ls
+  > ifshare key ls
   self
   mykey
 		`,
@@ -176,7 +177,7 @@ It is possible to export a private key to interoperable PEM PKCS8 format by expl
 passing '--format=pem-pkcs8-cleartext'. The resulting PEM file can then be consumed
 elsewhere. For example, using openssl to get a PEM with public key:
 
-  $ ipfs key export testkey --format=pem-pkcs8-cleartext -o privkey.pem
+  $ ifshare key export testkey --format=pem-pkcs8-cleartext -o privkey.pem
   $ openssl pkey -in privkey.pem -pubout > pubkey.pem
 `,
 	},
@@ -447,7 +448,7 @@ by passing '--format=pem-pkcs8-cleartext'.
 The PEM format allows for key generation outside of the IPFS node:
 
   $ openssl genpkey -algorithm ED25519 > ed25519.pem
-  $ ipfs key import test-openssl -f pem-pkcs8-cleartext ed25519.pem
+  $ ifshare key import test-openssl -f pem-pkcs8-cleartext ed25519.pem
 `,
 	},
 	Options: []cmds.Option{
@@ -623,7 +624,7 @@ var keyListCmd = &cmds.Command{
 var keyListDeprecatedCmd = &cmds.Command{
 	Status: cmds.Deprecated,
 	Helptext: cmds.HelpText{
-		Tagline: "Deprecated: use 'ipfs key ls' instead.",
+		Tagline: "Deprecated: use 'ifshare key ls' instead.",
 	},
 	Options:  keyListCmd.Options,
 	Run:      keyListCmd.Run,
@@ -734,11 +735,11 @@ var keyRotateCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Rotates the IPFS identity.",
 		ShortDescription: `
-Generates a new ipfs identity and saves it to the ipfs config file.
+Generates a new ifshare identity and saves it to the ifshare config file.
 Your existing identity key will be backed up in the Keystore.
 The daemon must not be running when calling this command.
 
-ipfs uses a repository in the local file system. By default, the repo is
+ifshare uses a repository in the local file system. By default, the repo is
 located at ~/.ipfs. To change the repo location, set the $IPFS_PATH
 environment variable:
 
@@ -979,8 +980,8 @@ func DaemonNotRunning(req *cmds.Request, env cmds.Environment) error {
 
 	log.Info("checking if daemon is running...")
 	if daemonLocked {
-		log.Debug("ipfs daemon is running")
-		e := "ipfs daemon is running. please stop it to run this command"
+		log.Debug("ifshare daemon is running")
+		e := "ifshare daemon is running. please stop it to run this command"
 		return cmds.ClientError(e)
 	}
 

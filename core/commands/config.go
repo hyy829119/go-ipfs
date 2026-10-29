@@ -43,10 +43,10 @@ var ConfigCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Get and set IPFS config values.",
 		ShortDescription: `
-'ipfs config' controls configuration variables. It works like 'git config'.
+'ifshare config' controls configuration variables. It works like 'git config'.
 The configuration values are stored in a config file inside your IPFS_PATH.`,
 		LongDescription: `
-'ipfs config' controls configuration variables. It works
+'ifshare config' controls configuration variables. It works
 much like 'git config'. The configuration values are stored in a config
 file inside your IPFS repository (IPFS_PATH).
 
@@ -54,15 +54,15 @@ Examples:
 
 Get the value of the 'Routing.Type' key:
 
-  $ ipfs config Routing.Type
+  $ ifshare config Routing.Type
 
 Set the value of the 'Routing.Type' key:
 
-  $ ipfs config Routing.Type auto
+  $ ifshare config Routing.Type auto
 
 Set multiple values in the 'Addresses.AppendAnnounce' array:
 
-  $ ipfs config Addresses.AppendAnnounce --json \
+  $ ifshare config Addresses.AppendAnnounce --json \
       '["/dns4/a.example.com/tcp/4001", "/dns4/b.example.com/tcp/4002"]'
 `,
 	},
@@ -137,7 +137,7 @@ Set multiple values in the 'Addresses.AppendAnnounce' array:
 				}
 				got, err := peer.Decode(candidate)
 				if err != nil || got != id {
-					return errors.New("cannot set Identity.PeerID to a value that does not match the node's private key; use 'ipfs key rotate' to change the node identity")
+					return errors.New("cannot set Identity.PeerID to a value that does not match the node's private key; use 'ifshare key rotate' to change the node identity")
 				}
 				output, err = setConfig(r, key, id.String())
 				if err != nil {
@@ -352,7 +352,7 @@ var configEditCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Open the config file for editing in $EDITOR.",
 		ShortDescription: `
-To use 'ipfs config edit', you must have the $EDITOR environment
+To use 'ifshare config edit', you must have the $EDITOR environment
 variable set to your preferred text editor.
 `,
 	},
@@ -381,12 +381,12 @@ var configReplaceCmd = &cmds.Command{
 Make sure to back up the config file first if necessary, as this operation
 can't be undone.
 
-The private key cannot be set over the Kubo RPC API. 'ipfs config replace'
+The private key cannot be set over the Kubo RPC API. 'ifshare config replace'
 keeps the existing Identity.PrivKey and ignores that field in <file>. It
 then re-derives Identity.PeerID from the stored key, so a different PeerID
 in <file> is overwritten with the one derived from the key on disk.
 
-To change the node's identity, stop the daemon and run 'ipfs key rotate'.
+To change the node's identity, stop the daemon and run 'ifshare key rotate'.
 `,
 	},
 
@@ -554,8 +554,8 @@ func transformConfig(configRoot string, configName string, transformer config.Tr
 	}
 	if oldDS.DiskSpec().String() != newDS.DiskSpec().String() {
 		return nil, nil, fmt.Errorf("profile %q changes the datastore layout, which is fixed when the repo is created. "+
-			"Create a new repo with 'ipfs init --profile=%s' and move your data there "+
-			"with 'ipfs dag export' and 'ipfs dag import', or with 'ipfs pin ls -t recursive' and 'ipfs pin add'",
+			"Create a new repo with 'ifshare init --profile=%s' and move your data there "+
+			"with 'ifshare dag export' and 'ifshare dag import', or with 'ifshare pin ls -t recursive' and 'ifshare pin add'",
 			configName, configName)
 	}
 

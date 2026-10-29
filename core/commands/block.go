@@ -31,7 +31,7 @@ var BlockCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Interact with raw IPFS blocks.",
 		ShortDescription: `
-'ipfs block' is a plumbing command used to manipulate raw IPFS blocks.
+'ifshare block' is a plumbing command used to manipulate raw IPFS blocks.
 Reads from stdin or writes to stdout. A block is identified by a Multihash
 passed with a valid CID.
 `,
@@ -49,7 +49,7 @@ var blockStatCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Print information of a raw IPFS block.",
 		ShortDescription: `
-'ipfs block stat' is a plumbing command for retrieving information
+'ifshare block stat' is a plumbing command for retrieving information
 on raw IPFS blocks. It outputs the following to stdout:
 
 	Key  - the CID of the block
@@ -100,7 +100,7 @@ var blockGetCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Get a raw IPFS block.",
 		ShortDescription: `
-'ipfs block get' is a plumbing command for retrieving raw IPFS blocks.
+'ifshare block get' is a plumbing command for retrieving raw IPFS blocks.
 It takes a <cid>, and outputs the block to stdout.
 `,
 		HTTP: &cmds.HTTPHelpText{
@@ -144,7 +144,7 @@ var blockPutCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Store input as an IPFS block.",
 		ShortDescription: `
-'ipfs block put' is a plumbing command for storing raw IPFS blocks.
+'ifshare block put' is a plumbing command for storing raw IPFS blocks.
 It reads data from stdin, and outputs the block's CID to stdout.
 
 Unless cid-codec is specified, this command returns raw (0x55) CIDv1 CIDs.
@@ -273,7 +273,7 @@ var blockRmCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Remove IPFS block(s) from the local datastore.",
 		ShortDescription: `
-'ipfs block rm' is a plumbing command for removing raw ipfs blocks.
+'ifshare block rm' is a plumbing command for removing raw ifshare blocks.
 It takes a list of CIDs to remove from the local datastore..
 `,
 	},

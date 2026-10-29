@@ -37,12 +37,12 @@ This command expects a file name or data provided via stdin.
 By default it will use URL-safe base64url encoding,
 but one can customize used base with -b:
 
-  > echo hello | ipfs multibase encode -b base16 > output_file
+  > echo hello | ifshare multibase encode -b base16 > output_file
   > cat output_file
   f68656c6c6f0a
 
   > echo hello > input_file
-  > ipfs multibase encode -b base16 input_file
+  > ifshare multibase encode -b base16 input_file
   f68656c6c6f0a
   `,
 	},
@@ -82,14 +82,14 @@ var mbaseDecodeCmd = &cmds.Command{
 		LongDescription: `
 This command expects multibase inside of a file or via stdin:
 
-  > echo -n hello | ipfs multibase encode -b base16 > file
+  > echo -n hello | ifshare multibase encode -b base16 > file
   > cat file
   f68656c6c6f
 
-  > ipfs multibase decode file
+  > ifshare multibase decode file
   hello
 
-  > cat file | ipfs multibase decode
+  > cat file | ifshare multibase decode
   hello
 `,
 	},
@@ -127,11 +127,11 @@ This command expects multibase inside of a file or via stdin.
 By default it will use URL-safe base64url encoding,
 but one can customize used base with -b:
 
-  > echo -n hello | ipfs multibase encode > file
+  > echo -n hello | ifshare multibase encode > file
   > cat file
   uaGVsbG8
 
-  > ipfs multibase transcode file -b base16 > transcoded_file
+  > ifshare multibase transcode file -b base16 > transcoded_file
   > cat transcoded_file
   f68656c6c6f
 `,

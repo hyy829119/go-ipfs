@@ -26,7 +26,8 @@ var BootstrapCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Show or edit the list of bootstrap peers.",
 		ShortDescription: `
-Running 'ipfs bootstrap' with no arguments will run 'ipfs bootstrap list'.
+Running 'ifshare bootstrap' with no arguments will run 'ifshare bootstrap
+list'.
 ` + bootstrapSecurityWarning,
 	},
 
@@ -327,7 +328,7 @@ func bootstrapRemove(r repo.Repo, cfg *config.Config, toRemove []string) ([]stri
 	if hasAuto && cfg.AutoConf.Enabled.WithDefault(config.DefaultAutoConfEnabled) {
 		// Cannot selectively remove peers when using "auto" bootstrap
 		// Users should either disable AutoConf or replace "auto" with specific peers
-		return nil, fmt.Errorf("cannot remove individual bootstrap peers when using 'auto' placeholder: the 'auto' value is managed by AutoConf. Either disable AutoConf by setting AutoConf.Enabled=false and replace 'auto' with specific peer addresses, or use 'ipfs bootstrap rm --all' to remove all peers")
+		return nil, fmt.Errorf("cannot remove individual bootstrap peers when using 'auto' placeholder: the 'auto' value is managed by AutoConf. Either disable AutoConf by setting AutoConf.Enabled=false and replace 'auto' with specific peer addresses, or use 'ifshare bootstrap rm --all' to remove all peers")
 	}
 
 	// Original logic for non-auto bootstrap

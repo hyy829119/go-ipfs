@@ -1,12 +1,15 @@
 package cli
 
 import (
+	"crypto/rand"
 	"fmt"
 	"os"
 	fp "path/filepath"
 	"strings"
 	"testing"
+	"time"
 
+	"github.com/ipfs/kubo/config"
 	"github.com/ipfs/kubo/test/cli/harness"
 	. "github.com/ipfs/kubo/test/cli/testutils"
 	pb "github.com/libp2p/go-libp2p/core/crypto/pb"
@@ -33,7 +36,7 @@ func testInitAlgo(t *testing.T, initFlags []string, expOutputName string, expPee
 		lines := []string{
 			fmt.Sprintf("generating %s keypair...done", expOutputName),
 			fmt.Sprintf("peer identity: %s", node.PeerID().String()),
-			fmt.Sprintf("initializing IPFS node at %s\n", node.Dir),
+			fmt.Sprintf("initializing ifshare node at %s\n", node.Dir),
 		}
 		expectedInitOutput := strings.Join(lines, "\n")
 		assert.Equal(t, expectedInitOutput, initRes.Stdout.String())
@@ -45,7 +48,7 @@ func testInitAlgo(t *testing.T, initFlags []string, expOutputName string, expPee
 		assert.NoFileExists(t, fp.Join(node.Dir, "._check_writeable"))
 
 		_, err := os.ReadDir(node.Dir)
-		assert.NoError(t, err, "ipfs dir should be listable")
+		assert.NoError(t, err, "ifshare dir should be listable")
 
 		validatePeerID(t, node.PeerID(), expPeerIDPubKeyErr, expPeerIDPubKeyType)
 
@@ -66,9 +69,9 @@ func testInitAlgo(t *testing.T, initFlags []string, expOutputName string, expPee
 		lines := []string{
 			fmt.Sprintf("generating %s keypair...done", expOutputName),
 			fmt.Sprintf("peer identity: %s", node.PeerID().String()),
-			fmt.Sprintf("initializing IPFS node at %s", node.Dir),
+			fmt.Sprintf("initializing ifshare node at %s", node.Dir),
 			"to get started, enter:",
-			fmt.Sprintf("\n\tipfs cat /ipfs/%s/readme\n\n", CIDWelcomeDocs),
+			fmt.Sprintf("\n\tifshare cat /ipfs/%s/readme\n\n", CIDWelcomeDocs),
 		}
 		expectedEmptyInitOutput := strings.Join(lines, "\n")
 		assert.Equal(t, expectedEmptyInitOutput, initRes.Stdout.String())
@@ -111,7 +114,7 @@ func TestInit(t *testing.T) {
 		testInitAlgo(t, []string{}, "ED25519", nil, pb.KeyType_Ed25519)
 	})
 
-	t.Run("ipfs init --profile with invalid profile fails", func(t *testing.T) {
+	t.Run("ifshare init --profile with invalid profile fails", func(t *testing.T) {
 		t.Parallel()
 		node := harness.NewT(t).NewNode()
 		res := node.RunIPFS("init", "--profile=invalid_profile")
@@ -119,13 +122,13 @@ func TestInit(t *testing.T) {
 		assert.Equal(t, "Error: invalid configuration profile: invalid_profile", res.Stderr.Trimmed())
 	})
 
-	t.Run("ipfs init --profile with valid profile succeeds", func(t *testing.T) {
+	t.Run("ifshare init --profile with valid profile succeeds", func(t *testing.T) {
 		t.Parallel()
 		node := harness.NewT(t).NewNode()
 		node.IPFS("init", "--profile=server")
 	})
 
-	t.Run("ipfs config looks good", func(t *testing.T) {
+	t.Run("ifshare config looks good", func(t *testing.T) {
 		t.Parallel()
 		node := harness.NewT(t).NewNode().Init("--profile=server")
 
@@ -139,7 +142,7 @@ func TestInit(t *testing.T) {
 		assert.Equal(t, "/ip4/127.0.0.1/tcp/0", out)
 	})
 
-	t.Run("ipfs init from existing config succeeds", func(t *testing.T) {
+	t.Run("ifshare init from existing config succeeds", func(t *testing.T) {
 		t.Parallel()
 		nodes := harness.NewT(t).NewNodes(2)
 		node1 := nodes[0]
@@ -152,7 +155,7 @@ func TestInit(t *testing.T) {
 		assert.Equal(t, "/ip4/127.0.0.1/tcp/0", out)
 	})
 
-	t.Run("ipfs init from 'ipfs config show' output fails", func(t *testing.T) {
+	t.Run("ifshare init from 'ifshare config show' output fails", func(t *testing.T) {
 		t.Parallel()
 		nodes := harness.NewT(t).NewNodes(2)
 		nodes[0].Init()
@@ -173,12 +176,98 @@ func TestInit(t *testing.T) {
 		assert.NoFileExists(t, fp.Join(nodes[1].Dir, "config"))
 	})
 
-	t.Run("ipfs init should not run while daemon is running", func(t *testing.T) {
+	t.Run("ifshare init should not run while daemon is running", func(t *testing.T) {
 		t.Parallel()
 		node := harness.NewT(t).NewNode().Init().StartDaemon()
 		defer node.StopDaemon()
 		res := node.RunIPFS("init")
 		assert.NotEqual(t, 0, res.ExitErr.ExitCode())
-		assert.Contains(t, res.Stderr.String(), "Error: ipfs daemon is running. please stop it to run this command")
+		assert.Contains(t, res.Stderr.String(), "Error: ifshare daemon is running. please stop it to run this command")
 	})
+}
+
+func TestInitNetworkingDefaults(t *testing.T) {
+	t.Parallel()
+
+	for _, profile := range []string{"", "server", "autoconf-on"} {
+		name := profile
+		if name == "" {
+			name = "default"
+		}
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			node := harness.NewT(t).NewNode()
+			args := []string{"init"}
+			if profile != "" {
+				args = append(args, "--profile="+profile)
+			}
+			// Use the CLI directly: Node.Init clears Bootstrap for test isolation.
+			node.IPFS(args...)
+			cfg := node.ReadConfig()
+
+			if profile == "autoconf-on" {
+				assert.True(t, cfg.AutoConf.Enabled.WithDefault(config.DefaultAutoConfEnabled))
+				assert.Equal(t, []string{config.AutoPlaceholder}, cfg.Bootstrap)
+				assert.Equal(t, map[string]string{".": config.AutoPlaceholder}, cfg.DNS.Resolvers)
+				assert.Equal(t, []string{config.AutoPlaceholder}, cfg.Routing.DelegatedRouters)
+				assert.Equal(t, []string{config.AutoPlaceholder}, cfg.Ipns.DelegatedPublishers)
+				return
+			}
+
+			assert.False(t, cfg.AutoConf.Enabled.WithDefault(config.DefaultAutoConfEnabled))
+			assert.Equal(t, []string{}, cfg.Bootstrap)
+			assert.Equal(t, map[string]string{}, cfg.DNS.Resolvers)
+			assert.Equal(t, []string{}, cfg.Routing.DelegatedRouters)
+			assert.Equal(t, []string{}, cfg.Ipns.DelegatedPublishers)
+			assert.Equal(t, "[]", node.IPFS("config", "Bootstrap").Stdout.Trimmed())
+			assert.Empty(t, node.IPFS("bootstrap", "list").Stdout.Trimmed())
+			assert.Empty(t, node.IPFS("bootstrap", "list", "--expand-auto").Stdout.Trimmed())
+		})
+	}
+}
+
+func TestInitPrivateNetworkBootstrap(t *testing.T) {
+	t.Parallel()
+
+	key := make([]byte, 32)
+	_, err := rand.Read(key)
+	require.NoError(t, err)
+	swarmKey := []byte(fmt.Sprintf("/key/swarm/psk/1.0.0/\n/base16/\n%x\n", key))
+
+	nodes := harness.NewT(t).NewNodes(2)
+	for _, node := range nodes {
+		// Keep the initialized Bootstrap and AutoConf values under test.
+		node.IPFS("init")
+		require.Equal(t, []string{}, node.ReadConfig().Bootstrap)
+		node.UpdateConfig(func(cfg *config.Config) {
+			cfg.Addresses.Swarm = []string{"/ip4/127.0.0.1/tcp/0"}
+			cfg.Addresses.API = config.Strings{"/ip4/127.0.0.1/tcp/0"}
+			cfg.Addresses.Gateway = config.Strings{"/ip4/127.0.0.1/tcp/0"}
+			cfg.Discovery.MDNS.Enabled = false
+			cfg.Swarm.DisableNatPortMap = true
+			cfg.AutoTLS.Enabled = config.False
+			cfg.Routing.Type = config.NewOptionalString("dht")
+			cfg.Routing.LoopbackAddressesOnLanDHT = config.True
+		})
+		require.NoError(t, os.WriteFile(fp.Join(node.Dir, "swarm.key"), swarmKey, 0o600))
+		node.Runner.Env["LIBP2P_FORCE_PNET"] = "1"
+		node.Runner.Env["IPFS_TELEMETRY"] = "off"
+	}
+
+	nodes[0].StartDaemon()
+	assert.Empty(t, nodes[0].Peers())
+	addrs := nodes[0].SwarmAddrsWithPeerIDs()
+	require.NotEmpty(t, addrs)
+	bootstrapAddr := addrs[0].String()
+	nodes[1].IPFS("bootstrap", "add", bootstrapAddr)
+	assert.Equal(t, []string{bootstrapAddr}, nodes[1].ReadConfig().Bootstrap)
+	nodes[1].StartDaemon()
+
+	require.Eventually(t, func() bool {
+		return len(nodes[0].Peers()) == 1 && len(nodes[1].Peers()) == 1
+	}, 10*time.Second, 100*time.Millisecond)
+
+	content := "content shared over the private network"
+	cid := nodes[0].IPFSAddStr(content)
+	assert.Equal(t, content, nodes[1].IPFS("cat", "--timeout=10s", cid).Stdout.String())
 }

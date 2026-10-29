@@ -1068,7 +1068,7 @@ Solutions (try in order):
 2. Increase Provide.DHT.DedicatedPeriodicWorkers (current %d)
 3. Set Provide.DHT.SweepEnabled=false and Routing.AcceleratedDHTClient=true (last resort, not recommended)
 
-See how the reprovide queue is processed in real-time with 'watch ipfs provide stat --all --compact'
+See how the reprovide queue is processed in real-time with 'watch ifshare provide stat --all --compact'
 
 See docs: https://github.com/ipfs/kubo/blob/master/docs/config.md#providedhtmaxworkers`,
 									reprovideAlertPollInterval.Truncate(time.Minute).String(), prevQueueSize, queueSize,

@@ -59,20 +59,26 @@ const (
 // CommandsCmd takes in a root command,
 // and returns a command that lists the subcommands in that root
 func CommandsCmd(root *cmds.Command) *cmds.Command {
+	return CommandsCmdWithName(root, "ipfs")
+}
+
+// CommandsCmdWithName lists commands for a CLI executable with a custom name.
+// CommandsCmd retains the original name for the RPC API.
+func CommandsCmdWithName(root *cmds.Command, name string) *cmds.Command {
 	return &cmds.Command{
 		Helptext: cmds.HelpText{
 			Tagline:          "List all available commands.",
 			ShortDescription: `Lists all available commands (and subcommands) and exits.`,
 		},
 		Subcommands: map[string]*cmds.Command{
-			"completion": CompletionCmd(root),
+			"completion": completionCmd(root, name),
 		},
 		Options: []cmds.Option{
 			cmds.BoolOption(flagsOptionName, "f", "Show command flags"),
 		},
 		Extra: CreateCmdExtras(SetDoesNotUseRepo(true)),
 		Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
-			rootCmd := cmd2outputCmd("ipfs", root)
+			rootCmd := cmd2outputCmd(name, root)
 			rootCmd.showOpts, _ = req.Options[flagsOptionName].(bool)
 			return cmds.EmitOnce(res, &rootCmd)
 		},
@@ -136,6 +142,10 @@ func cmdPathStrings(cmd *Command, showOptions bool) []string {
 }
 
 func CompletionCmd(root *cmds.Command) *cmds.Command {
+	return completionCmd(root, "ipfs")
+}
+
+func completionCmd(root *cmds.Command, name string) *cmds.Command {
 	return &cmds.Command{
 		Helptext: cmds.HelpText{
 			Tagline: "Generate shell completions.",
@@ -152,8 +162,8 @@ Generates command completions for the bash shell.
 The simplest way to see it working is write the completions
 to a file and then source it:
 
-  > ipfs commands completion bash > ipfs-completion.bash
-  > source ./ipfs-completion.bash
+  > ifshare commands completion bash > ifshare-completion.bash
+  > source ./ifshare-completion.bash
 
 To install the completions permanently, they can be moved to
 /etc/bash_completion.d or sourced from your ~/.bashrc file.
@@ -162,7 +172,7 @@ To install the completions permanently, they can be moved to
 				NoRemote: true,
 				Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 					var buf bytes.Buffer
-					if err := writeBashCompletions(root, &buf); err != nil {
+					if err := writeBashCompletions(root, name, &buf); err != nil {
 						return err
 					}
 					res.SetLength(uint64(buf.Len()))
@@ -179,8 +189,8 @@ Generates command completions for the zsh shell.
 The simplest way to see it working is write the completions
 to a file and then source it:
 
-  > ipfs commands completion zsh > ipfs-completion.zsh
-  > source ./ipfs-completion.zsh
+  > ifshare commands completion zsh > ifshare-completion.zsh
+  > source ./ifshare-completion.zsh
 
 To install the completions permanently, they can be moved to
 /etc/zsh/completions or sourced from your ~/.zshrc file.
@@ -189,7 +199,7 @@ To install the completions permanently, they can be moved to
 				NoRemote: true,
 				Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 					var buf bytes.Buffer
-					if err := writeZshCompletions(root, &buf); err != nil {
+					if err := writeZshCompletions(root, name, &buf); err != nil {
 						return err
 					}
 					res.SetLength(uint64(buf.Len()))
@@ -206,8 +216,8 @@ Generates command completions for the fish shell.
 The simplest way to see it working is write the completions
 to a file and then source it:
 
-  > ipfs commands completion fish > ipfs-completion.fish
-  > source ./ipfs-completion.fish
+  > ifshare commands completion fish > ifshare-completion.fish
+  > source ./ifshare-completion.fish
 
 To install the completions permanently, they can be moved to
 /etc/fish/completions or ~/.config/fish/completions or sourced from your ~/.config/fish/config.fish file.
@@ -216,7 +226,7 @@ To install the completions permanently, they can be moved to
 				NoRemote: true,
 				Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 					var buf bytes.Buffer
-					if err := writeFishCompletions(root, &buf); err != nil {
+					if err := writeFishCompletions(root, name, &buf); err != nil {
 						return err
 					}
 					res.SetLength(uint64(buf.Len()))

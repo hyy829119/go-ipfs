@@ -32,8 +32,8 @@ func TestWebUI(t *testing.T) {
 		body := resp.Body
 		assert.Contains(t, body, "IPFS WebUI Not Available")
 		assert.Contains(t, body, "Gateway.NoFetch=true")
-		assert.Contains(t, body, "ipfs pin add")
-		assert.Contains(t, body, "ipfs dag import")
+		assert.Contains(t, body, "ifshare pin add")
+		assert.Contains(t, body, "ifshare dag import")
 		assert.Contains(t, body, "https://github.com/ipfs/ipfs-webui/releases")
 	})
 

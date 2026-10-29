@@ -28,8 +28,8 @@ const (
 
 var VersionCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
-		Tagline:          "Show IPFS version information.",
-		ShortDescription: "Returns the current version of IPFS and exits.",
+		Tagline:          "Show ifshare version information.",
+		ShortDescription: "Returns the current version of ifshare and exits.",
 	},
 	Subcommands: map[string]*cmds.Command{
 		"deps":  depsVersionCommand,
@@ -160,7 +160,7 @@ of connected peers and see if the Kubo version we're running is outdated.
 Peers with an AgentVersion that doesn't start with 'kubo/' are ignored.
 'UpdateAvailable' is set to true only if the 'min-fraction' criteria are met.
 
-The 'ipfs daemon' does the same check regularly and logs when a new version
+The 'ifshare daemon' does the same check regularly and logs when a new version
 is available. You can stop these regular checks by setting
 Version.SwarmCheckEnabled:false in the config.
 `,

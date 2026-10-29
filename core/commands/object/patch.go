@@ -16,16 +16,16 @@ var ObjectPatchCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Deprecated way to create a new merkledag object based on an existing one. Use MFS with 'files cp|rm' instead.",
 		ShortDescription: `
-'ipfs object patch <root> <cmd> <args>' is a plumbing command used to
+'ifshare object patch <root> <cmd> <args>' is a plumbing command used to
 build custom dag-pb objects. It mutates objects, creating new objects as a
 result. This is the Merkle-DAG version of modifying an object.
 
 DEPRECATED and provided for legacy reasons.
-For modern use cases, use MFS with 'files' commands: 'ipfs files --help'.
+For modern use cases, use MFS with 'files' commands: 'ifshare files --help'.
 
-  $ ipfs files cp /ipfs/QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn /some-dir
-  $ ipfs files cp /ipfs/Qmayz4F4UzqcAMitTzU4zCSckDofvxstDuj3y7ajsLLEVs /some-dir/added-file.jpg
-  $ ipfs files stat --hash /some-dir
+  $ ifshare files cp /ipfs/QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn /some-dir
+  $ ifshare files cp /ipfs/Qmayz4F4UzqcAMitTzU4zCSckDofvxstDuj3y7ajsLLEVs /some-dir/added-file.jpg
+  $ ifshare files stat --hash /some-dir
 
   The above will add 'added-file.jpg' to the directory placed under /some-dir
   and the CID of updated directory is returned by 'files stat'
@@ -61,7 +61,7 @@ from small, flat UnixFS directories (not HAMTShard). Removing links from
 files or large sharded directories will produce invalid UnixFS structures.
 
 For working with any UnixFS directories (including large/sharded ones),
-use 'ipfs files rm' instead: 'ipfs files --help'.
+use 'ifshare files rm' instead: 'ifshare files --help'.
 `,
 	},
 	Arguments: []cmds.Argument{
@@ -129,11 +129,11 @@ to small, flat UnixFS directories (not HAMTShard). Adding links to files
 or large sharded directories will produce invalid UnixFS structures.
 
 For working with any UnixFS directories (including large/sharded ones),
-use MFS and 'files' commands instead: 'ipfs files --help'.
+use MFS and 'files' commands instead: 'ifshare files --help'.
 
-  $ ipfs files cp /ipfs/QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn /some-dir
-  $ ipfs files cp /ipfs/Qmayz4F4UzqcAMitTzU4zCSckDofvxstDuj3y7ajsLLEVs /some-dir/added-file.jpg
-  $ ipfs files stat --hash /some-dir
+  $ ifshare files cp /ipfs/QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn /some-dir
+  $ ifshare files cp /ipfs/Qmayz4F4UzqcAMitTzU4zCSckDofvxstDuj3y7ajsLLEVs /some-dir/added-file.jpg
+  $ ifshare files stat --hash /some-dir
 
   The above will add 'added-file.jpg' to the directory placed under /some-dir
   and the CID of updated directory is returned by 'files stat'.

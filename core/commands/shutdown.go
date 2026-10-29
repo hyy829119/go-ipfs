@@ -20,7 +20,7 @@ var daemonShutdownCmd = &cmds.Command{
 		}
 
 		if err := nd.Close(); err != nil {
-			log.Error("error while shutting down ipfs daemon:", err)
+			log.Error("error while shutting down ifshare daemon:", err)
 		}
 
 		return nil

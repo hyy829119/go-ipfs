@@ -54,10 +54,9 @@ func BuildNode(ipfsBin, baseDir string, id int) *Node {
 	env := environToMap(os.Environ())
 	env["IPFS_PATH"] = dir
 
-	// If using "ipfs" binary name, provide helpful binary information
-	if ipfsBin == "ipfs" {
-		// Check if cmd/ipfs/ipfs exists (simple relative path check)
-		localBinary := "cmd/ipfs/ipfs"
+	// If using a binary name, provide helpful binary information.
+	if ipfsBin == "ifshare" || ipfsBin == "ipfs" {
+		localBinary := filepath.Join("cmd", "ipfs", ipfsBin)
 		localExists := false
 		if _, err := os.Stat(localBinary); err == nil {
 			localExists = true
@@ -66,19 +65,18 @@ func BuildNode(ipfsBin, baseDir string, id int) *Node {
 			}
 		}
 
-		// Check if ipfs is available in PATH
-		pathBinary, pathErr := exec.LookPath("ipfs")
+		pathBinary, pathErr := exec.LookPath(ipfsBin)
 
 		// Handle different scenarios
 		if pathErr != nil {
 			// No ipfs in PATH
 			if localExists {
-				fmt.Printf("WARNING: No 'ipfs' found in PATH, but local binary exists at %s\n", localBinary)
+				fmt.Printf("WARNING: No %q found in PATH, but local binary exists at %s\n", ipfsBin, localBinary)
 				fmt.Printf("Consider adding it to PATH or run: export PATH=\"$(pwd)/cmd/ipfs:$PATH\"\n")
 			} else {
-				fmt.Printf("ERROR: No 'ipfs' binary found in PATH and no local build at cmd/ipfs/ipfs\n")
-				fmt.Printf("Run 'make build' first or install ipfs and add it to PATH\n")
-				panic("ipfs binary not available")
+				fmt.Printf("ERROR: No %q binary found in PATH and no local build at %s\n", ipfsBin, localBinary)
+				fmt.Printf("Run 'make build' first or install ifshare and add it to PATH\n")
+				panic("ifshare binary not available")
 			}
 		} else {
 			// ipfs found in PATH

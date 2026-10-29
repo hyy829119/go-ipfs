@@ -209,7 +209,7 @@ func Start(buildEnv func(ctx context.Context, req *cmds.Request) (cmds.Environme
 
 	// output depends on executable name passed in os.Args
 	// so we need to make sure it's stable
-	os.Args[0] = "ipfs"
+	os.Args[0] = "ifshare"
 
 	err = cli.Run(ctx, Root, os.Args, os.Stdin, os.Stdout, os.Stderr, buildEnv, makeExecutor)
 	if err != nil {

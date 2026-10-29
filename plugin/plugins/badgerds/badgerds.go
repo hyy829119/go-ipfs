@@ -127,9 +127,9 @@ func (c *datastoreConfig) Create(path string) (repo.Datastore, error) {
 ║    1. Create a new IPFS_PATH with flatfs (or experimental pebbleds         ║
 ║       if flatfs does not serve your use case):                             ║
 ║         export IPFS_PATH=/path/to/new/repo                                 ║
-║         ipfs init --profile=flatfs                                         ║
-║    2. Move pinned data via ipfs dag export/import                          ║
-║       or ipfs pin ls -t recursive|add                                      ║
+║         ifshare init --profile=flatfs                                         ║
+║    2. Move pinned data via ifshare dag export/import                          ║
+║       or ifshare pin ls -t recursive|add                                      ║
 ║    3. Decommission the old badger-based node                               ║
 ║                                                                            ║
 ║  See https://github.com/ipfs/kubo/blob/master/docs/datastores.md           ║

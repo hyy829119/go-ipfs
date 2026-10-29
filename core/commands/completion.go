@@ -10,6 +10,7 @@ import (
 )
 
 type completionCommand struct {
+	ProgramName  string
 	Name         string
 	FullName     string
 	Description  string
@@ -29,8 +30,9 @@ type singleOption struct {
 	Description string
 }
 
-func commandToCompletions(name string, fullName string, cmd *cmds.Command) *completionCommand {
+func commandToCompletions(programName, name, fullName string, cmd *cmds.Command) *completionCommand {
 	parsed := &completionCommand{
+		ProgramName: programName,
 		Name:        name,
 		FullName:    fullName,
 		Description: cmd.Helptext.Tagline,
@@ -38,7 +40,7 @@ func commandToCompletions(name string, fullName string, cmd *cmds.Command) *comp
 	}
 	for name, subCmd := range cmd.Subcommands {
 		parsed.Subcommands = append(parsed.Subcommands,
-			commandToCompletions(name, fullName+" "+name, subCmd))
+			commandToCompletions(programName, name, fullName+" "+name, subCmd))
 	}
 	slices.SortFunc(parsed.Subcommands, func(a, b *completionCommand) int {
 		return strings.Compare(a.Name, b.Name)
@@ -99,16 +101,16 @@ done
 
 if [[ "${word}" == -* ]]; then
 {{ if .ShortFlags -}}
-    _ipfs_compgen -W $'{{ range .ShortFlags }}-{{.}} \n{{end}}' -- "${word}"
+    _{{ .ProgramName }}_compgen -W $'{{ range .ShortFlags }}-{{.}} \n{{end}}' -- "${word}"
 {{ end -}}
 {{- if .ShortOptions -}}
-    _ipfs_compgen -S = -W $'{{ range .ShortOptions }}-{{.}}\n{{end}}' -- "${word}"
+    _{{ .ProgramName }}_compgen -S = -W $'{{ range .ShortOptions }}-{{.}}\n{{end}}' -- "${word}"
 {{ end -}}
 {{- if .LongFlags -}}
-    _ipfs_compgen -W $'{{ range .LongFlags }}--{{.}} \n{{end}}' -- "${word}"
+    _{{ .ProgramName }}_compgen -W $'{{ range .LongFlags }}--{{.}} \n{{end}}' -- "${word}"
 {{ end -}}
 {{- if .LongOptions -}}
-    _ipfs_compgen -S = -W $'{{ range .LongOptions }}--{{.}}\n{{end}}' -- "${word}"
+    _{{ .ProgramName }}_compgen -S = -W $'{{ range .LongOptions }}--{{.}}\n{{end}}' -- "${word}"
 {{ end -}}
     return 0
 fi
@@ -122,14 +124,14 @@ done
 
 {{- if .Subcommands }}
 if [[ "${argidx}" -eq 0 ]]; then
-    _ipfs_compgen -W $'{{ range .Subcommands }}{{.Name}} \n{{end}}' -- "${word}"
+    _{{ .ProgramName }}_compgen -W $'{{ range .Subcommands }}{{.Name}} \n{{end}}' -- "${word}"
 fi
 {{ end -}}
 `))
 
 	bashCompletionTemplate = template.Must(commandTemplate.New("root").Parse(`#!/bin/bash
 
-_ipfs_compgen() {
+_{{ .ProgramName }}_compgen() {
   local oldifs="$IFS"
   IFS=$'\n'
   while read -r line; do
@@ -138,20 +140,20 @@ _ipfs_compgen() {
   IFS="$oldifs"
 }
 
-_ipfs() {
+_{{ .ProgramName }}() {
   COMPREPLY=()
   local index=1
   local argidx=0
   local word="${COMP_WORDS[COMP_CWORD]}"
   {{ template "command" . }}
 }
-complete -o nosort -o nospace -o default -F _ipfs ipfs
+complete -o nosort -o nospace -o default -F _{{ .ProgramName }} {{ .ProgramName }}
 `))
 
 	zshCompletionTemplate = template.Must(commandTemplate.New("root").Parse(`#!bin/zsh
 autoload bashcompinit
 bashcompinit
-_ipfs_compgen() {
+_{{ .ProgramName }}_compgen() {
 local oldifs="$IFS"
 IFS=$'\n'
 while read -r line; do
@@ -160,35 +162,35 @@ done < <(compgen "$@")
 IFS="$oldifs"
 }
 
-_ipfs() {
+_{{ .ProgramName }}() {
 COMPREPLY=()
 local index=1
 local argidx=0
 local word="${COMP_WORDS[COMP_CWORD]}"
 {{ template "command" . }}
 }
-complete -o nosort -o nospace -o default -F _ipfs ipfs
+complete -o nosort -o nospace -o default -F _{{ .ProgramName }} {{ .ProgramName }}
 `))
 
 	fishCommandTemplate := template.Must(template.New("command").Parse(`
 {{- if .IsFinal -}}
-complete -c ipfs -n '__fish_ipfs_seen_all_subcommands_from{{ .FullName }}' -F
+complete -c {{ .ProgramName }} -n '__fish_{{ .ProgramName }}_seen_all_subcommands_from{{ .FullName }}' -F
 {{ end -}}
 {{- range .Flags -}}
-    complete -c ipfs -n '__fish_ipfs_seen_all_subcommands_from{{ $.FullName }}' {{ range .ShortNames }}-s {{.}} {{end}}{{ range .LongNames }}-l {{.}} {{end}}-d "{{ .Description }}"
+    complete -c {{ $.ProgramName }} -n '__fish_{{ $.ProgramName }}_seen_all_subcommands_from{{ $.FullName }}' {{ range .ShortNames }}-s {{.}} {{end}}{{ range .LongNames }}-l {{.}} {{end}}-d "{{ .Description }}"
 {{ end -}}
 {{- range .Options -}}
-    complete -c ipfs -n '__fish_ipfs_seen_all_subcommands_from{{ $.FullName }}' -r {{ range .ShortNames }}-s {{.}} {{end}}{{ range .LongNames }}-l {{.}} {{end}}-d "{{ .Description }}"
+    complete -c {{ $.ProgramName }} -n '__fish_{{ $.ProgramName }}_seen_all_subcommands_from{{ $.FullName }}' -r {{ range .ShortNames }}-s {{.}} {{end}}{{ range .LongNames }}-l {{.}} {{end}}-d "{{ .Description }}"
 {{ end -}}
 
 {{- range .Subcommands }}
 #{{ .FullName }}
-complete -c ipfs -n '__fish_ipfs_use_subcommand{{ .FullName }}' -a {{ .Name }} -d "{{ .Description }}"
+complete -c {{ .ProgramName }} -n '__fish_{{ .ProgramName }}_use_subcommand{{ .FullName }}' -a {{ .Name }} -d "{{ .Description }}"
 {{ template "command" . }}
 {{ end -}}
 	`))
 	fishCompletionTemplate = template.Must(fishCommandTemplate.New("root").Parse(`#!/usr/bin/env fish
-function __fish_ipfs_seen_all_subcommands_from
+function __fish_{{ .ProgramName }}_seen_all_subcommands_from
      set -l cmd (commandline -poc)
      set -e cmd[1]
      for c in $argv
@@ -199,7 +201,7 @@ function __fish_ipfs_seen_all_subcommands_from
      return 0
 end
 
-function __fish_ipfs_use_subcommand
+function __fish_{{ .ProgramName }}_use_subcommand
 	set -e argv[-1]
 	set -l cmd (commandline -poc)
 	set -e cmd[1]
@@ -217,27 +219,27 @@ function __fish_ipfs_use_subcommand
 	test -z "$argv"
 end
 
-complete -c ipfs -l help -d "Show the full command help text."
+complete -c {{ .ProgramName }} -l help -d "Show the full command help text."
 
-complete -c ipfs --keep-order --no-files
+complete -c {{ .ProgramName }} --keep-order --no-files
 
 {{ template "command" . }}
 `))
 }
 
 // writeBashCompletions generates a bash completion script for the given command tree.
-func writeBashCompletions(cmd *cmds.Command, out io.Writer) error {
-	cmds := commandToCompletions("ipfs", "", cmd)
+func writeBashCompletions(cmd *cmds.Command, name string, out io.Writer) error {
+	cmds := commandToCompletions(name, name, "", cmd)
 	return bashCompletionTemplate.Execute(out, cmds)
 }
 
 // writeFishCompletions generates a fish completion script for the given command tree.
-func writeFishCompletions(cmd *cmds.Command, out io.Writer) error {
-	cmds := commandToCompletions("ipfs", "", cmd)
+func writeFishCompletions(cmd *cmds.Command, name string, out io.Writer) error {
+	cmds := commandToCompletions(name, name, "", cmd)
 	return fishCompletionTemplate.Execute(out, cmds)
 }
 
-func writeZshCompletions(cmd *cmds.Command, out io.Writer) error {
-	cmds := commandToCompletions("ipfs", "", cmd)
+func writeZshCompletions(cmd *cmds.Command, name string, out io.Writer) error {
+	cmds := commandToCompletions(name, name, "", cmd)
 	return zshCompletionTemplate.Execute(out, cmds)
 }

@@ -39,7 +39,7 @@ var LogCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Interact with the daemon log output.",
 		ShortDescription: `
-'ipfs log' contains utility commands to affect or read the logging
+'ifshare log' contains utility commands to affect or read the logging
 output of a running daemon.
 
 There are also two environmental variables that direct the logging
@@ -77,45 +77,45 @@ Setting '*' changes everything at once, including the default.
 
 EXAMPLES - Getting levels:
 
-  ipfs log level              # Show only the default fallback level
-  ipfs log level all          # Show all subsystem levels (100+ lines)
-  ipfs log level core         # Show level for 'core' subsystem only
+  ifshare log level              # Show only the default fallback level
+  ifshare log level all          # Show all subsystem levels (100+ lines)
+  ifshare log level core         # Show level for 'core' subsystem only
 
 EXAMPLES - Setting levels:
 
-  ipfs log level core debug   # Set 'core' to 'debug' (default unchanged)
-  ipfs log level all info     # Set ALL to 'info' (including default)
-  ipfs log level core default # Reset 'core' to use current default level
+  ifshare log level core debug   # Set 'core' to 'debug' (default unchanged)
+  ifshare log level all info     # Set ALL to 'info' (including default)
+  ifshare log level core default # Reset 'core' to use current default level
 
 WILDCARD OPTIONS:
 
 Use 'all' (convenient) or '*' (requires escaping) to affect all subsystems:
-  ipfs log level all debug    # Convenient - no shell escaping needed
-  ipfs log level '*' debug    # Equivalent but needs quotes: '*' or "*" or \*
+  ifshare log level all debug    # Convenient - no shell escaping needed
+  ifshare log level '*' debug    # Quote the wildcard.
 
 BEHAVIOR EXAMPLES:
 
 Initial state (all using default 'error'):
-  $ ipfs log level              => error
-  $ ipfs log level core         => error
+  $ ifshare log level              => error
+  $ ifshare log level core         => error
 
 After setting one subsystem:
-  $ ipfs log level core debug
-  $ ipfs log level              => error (default unchanged!)
-  $ ipfs log level core         => debug (explicitly set)
-  $ ipfs log level dht          => error (still uses default)
+  $ ifshare log level core debug
+  $ ifshare log level              => error (default unchanged!)
+  $ ifshare log level core         => debug (explicitly set)
+  $ ifshare log level dht          => error (still uses default)
 
 After setting everything with 'all':
-  $ ipfs log level all info
-  $ ipfs log level              => info (default changed!)
-  $ ipfs log level core         => info (all changed)
-  $ ipfs log level dht          => info (all changed)
+  $ ifshare log level all info
+  $ ifshare log level              => info (default changed!)
+  $ ifshare log level core         => info (all changed)
+  $ ifshare log level dht          => info (all changed)
 
 The 'default' keyword always refers to the current default level:
-  $ ipfs log level              => error
-  $ ipfs log level core default  # Sets core to 'error'
-  $ ipfs log level all info      # Changes default to 'info'
-  $ ipfs log level core default  # Now sets core to 'info'
+  $ ifshare log level              => error
+  $ ifshare log level core default  # Sets core to 'error'
+  $ ifshare log level all info      # Changes default to 'info'
+  $ ifshare log level core default  # Now sets core to 'info'
 `,
 	},
 
@@ -221,7 +221,7 @@ var logLsCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "List the logging subsystems.",
 		ShortDescription: `
-'ipfs log ls' is a utility command used to list the logging
+'ifshare log ls' is a utility command used to list the logging
 subsystems of a running daemon.
 `,
 	},
@@ -250,8 +250,8 @@ NOTE: --log-level requires the server to be logging at least at this level
 
 Example:
 
-  GOLOG_LOG_LEVEL="error,bitswap=debug" ipfs daemon
-  ipfs log tail --log-level info
+  GOLOG_LOG_LEVEL="error,bitswap=debug" ifshare daemon
+  ifshare log tail --log-level info
 
 This will only return 'info' logs from bitswap and skip 'debug'.
 `,

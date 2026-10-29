@@ -23,7 +23,7 @@ var PubsubCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "An experimental publish-subscribe system on ipfs.",
 		ShortDescription: `
-ipfs pubsub allows you to publish messages to a given topic, and also to
+ifshare pubsub allows you to publish messages to a given topic, and also to
 subscribe to new messages on a given topic.
 
 EXPERIMENTAL FEATURE
@@ -60,7 +60,7 @@ var PubsubSubCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Subscribe to messages on a given topic.",
 		ShortDescription: `
-ipfs pubsub sub subscribes to messages on a given topic.
+ifshare pubsub sub subscribes to messages on a given topic.
 
 EXPERIMENTAL FEATURE
 
@@ -72,7 +72,7 @@ EXPERIMENTAL FEATURE
 PEER ENCODING
 
   Peer IDs in From fields are encoded using the default text representation
-  from go-libp2p. This ensures the same string values as in 'ipfs pubsub peers'.
+  from go-libp2p. This ensures the same string values as in 'ifshare pubsub peers'.
 
 TOPIC AND DATA ENCODING
 
@@ -80,7 +80,7 @@ TOPIC AND DATA ENCODING
   correctly the RPC client and server will use multibase encoding behind
   the scenes.
 
-  You can inspect the format by passing --enc=json. The ipfs multibase commands
+  You can inspect the format by passing --enc=json. The ifshare multibase commands
   can be used for encoding/decoding multibase strings in the userland.
 `,
 	},
@@ -160,7 +160,7 @@ var PubsubPubCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Publish data to a given pubsub topic.",
 		ShortDescription: `
-ipfs pubsub pub publishes a message to a specified topic.
+ifshare pubsub pub publishes a message to a specified topic.
 It reads binary data from stdin or a file.
 
 EXPERIMENTAL FEATURE
@@ -217,7 +217,8 @@ var PubsubLsCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "List subscribed topics by name.",
 		ShortDescription: `
-ipfs pubsub ls lists out the names of topics you are currently subscribed to.
+ifshare pubsub ls lists out the names of topics you are currently subscribed
+to.
 
 EXPERIMENTAL FEATURE
 
@@ -232,7 +233,7 @@ TOPIC ENCODING
   correctly RPC client and server will use multibase encoding behind
   the scenes.
 
-  You can inspect the format by passing --enc=json. ipfs multibase commands
+  You can inspect the format by passing --enc=json. ifshare multibase commands
   can be used for encoding/decoding multibase strings in the userland.
 `,
 	},
@@ -290,7 +291,7 @@ var PubsubPeersCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "List peers we are currently pubsubbing with.",
 		ShortDescription: `
-ipfs pubsub peers with no arguments lists out the pubsub peers you are
+ifshare pubsub peers with no arguments lists out the pubsub peers you are
 currently connected to. If given a topic, it will list connected peers who are
 subscribed to the named topic.
 
@@ -307,7 +308,7 @@ TOPIC AND DATA ENCODING
   correctly RPC client and server will use multibase encoding behind
   the scenes.
 
-  You can inspect the format by passing --enc=json. ipfs multibase commands
+  You can inspect the format by passing --enc=json. ifshare multibase commands
   can be used for encoding/decoding multibase strings in the userland.
 `,
 	},

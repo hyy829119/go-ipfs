@@ -112,7 +112,7 @@ func TestBootstrapCommandsWithAutoPlaceholder(t *testing.T) {
 			"should provide helpful error message about auto placeholder")
 		assert.Contains(t, output, "disable AutoConf",
 			"should suggest disabling AutoConf as solution")
-		assert.Contains(t, output, "ipfs bootstrap rm --all",
+		assert.Contains(t, output, "ifshare bootstrap rm --all",
 			"should suggest using rm --all as alternative")
 	})
 

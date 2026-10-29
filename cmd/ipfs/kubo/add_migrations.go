@@ -102,7 +102,7 @@ func addMigrationFiles(ctx context.Context, node *core.IpfsNode, paths []string,
 // them. This is done after connecting to the peer.
 func addMigrationPaths(ctx context.Context, node *core.IpfsNode, peerInfo peer.AddrInfo, paths []path.Path, pin bool) error {
 	if len(paths) == 0 {
-		return errors.New("nothing downloaded by ipfs fetcher")
+		return errors.New("nothing downloaded by ifshare fetcher")
 	}
 	if len(peerInfo.Addrs) == 0 {
 		return errors.New("no local swarm address for migration node")

@@ -124,9 +124,9 @@ var queryDhtCmd = &cmds.Command{
 var RemovedDHTCmd = &cmds.Command{
 	Status: cmds.Removed,
 	Helptext: cmds.HelpText{
-		Tagline: "Removed, use 'ipfs routing' instead.",
+		Tagline: "Removed, use 'ifshare routing' instead.",
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
-		return errors.New("removed, use 'ipfs routing' instead")
+		return errors.New("removed, use 'ifshare routing' instead")
 	},
 }

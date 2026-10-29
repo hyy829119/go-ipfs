@@ -144,24 +144,25 @@ const (
 var provideRefRoutingCmd = &cmds.Command{
 	Status: cmds.Deprecated,
 	Helptext: cmds.HelpText{
-		Tagline: "Deprecated, use 'ipfs provide once' instead.",
+		Tagline: "Deprecated, use 'ifshare provide once' instead.",
 		ShortDescription: `
-'ipfs routing provide' has moved to 'ipfs provide once'. This command keeps
+'ifshare routing provide' has moved to 'ifshare provide once'. This command
+keeps
 its existing behavior so existing scripts continue to work, but will be
 removed in a future release.
 
-Compared to 'ipfs provide once', this command:
+Compared to 'ifshare provide once', this command:
 
 - Buffers all CIDs from arguments and stdin before doing any work,
   instead of streaming them as they arrive.
 - Emits no per-CID output: there is no JSON event stream and the -v
   flag's per-peer events do not actually propagate to the encoder.
 - With -r, re-walks subtrees shared between roots and re-announces
-  shared blocks; 'ipfs provide once' deduplicates across all inputs.
+  shared blocks; 'ifshare provide once' deduplicates across all inputs.
 - Issues an extra synchronous DHT lookup per CID on top of the
   provider system, which defeats sweep batching.
 
-Prefer 'ipfs provide once' for new scripts and any large input.
+Prefer 'ifshare provide once' for new scripts and any large input.
 `,
 	},
 
@@ -296,7 +297,7 @@ Provide.Strategy.
 
 Only works when Provide.DHT.SweepEnabled=false. With the default sweep
 provider, reproviding is continuous and scheduled, so this command returns
-an error. Use 'ipfs provide stat --all' to monitor sweep progress.
+an error. Use 'ifshare provide stat --all' to monitor sweep progress.
 `,
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
@@ -321,7 +322,7 @@ an error. Use 'ipfs provide stat --all' to monitor sweep progress.
 		}
 		provideSys, ok := nd.Provider.(provider.Reprovider)
 		if !ok {
-			err := errors.New("manual reprovide is not available with the sweep provider; set Provide.DHT.SweepEnabled=false to use the legacy provider, or run 'ipfs provide stat --all' to monitor the sweep schedule")
+			err := errors.New("manual reprovide is not available with the sweep provider; set Provide.DHT.SweepEnabled=false to use the legacy provider, or run 'ifshare provide stat --all' to monitor the sweep schedule")
 			log.Error(err)
 			return err
 		}
@@ -497,9 +498,9 @@ Keys have two parts: a keytype (foo) and the key name (bar). IPNS uses the
 /ipns keytype, and expects the key name to be a Peer ID. IPNS entries are
 specifically formatted (protocol buffer).
 
-You may only use keytypes that are supported in your ipfs binary: currently
+You may only use keytypes that are supported in your ifshare binary: currently
 this is only /ipns. Unless you have a relatively deep understanding of the
-go-ipfs routing internals, you likely want to be using 'ipfs name publish' instead
+ifshare routing internals, you likely want to be using 'ifshare name publish' instead
 of this.
 
 The value must be a valid value for the given key type. For example, if the key

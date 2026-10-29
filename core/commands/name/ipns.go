@@ -43,24 +43,25 @@ the private key enables publishing new (signed) values. In both publish
 and resolve, the default name used is the node's own PeerID,
 which is the hash of its public key.
 
-You can use the 'ipfs key' commands to list and generate more names and their
+You can use the 'ifshare key' commands to list and generate more names and
+their
 respective keys.
 
 Examples:
 
 Resolve the value of your name:
 
-  > ipfs name resolve
+  > ifshare name resolve
   /ipfs/QmatmE9msSfkKxoffpHwNLNKgwZG8eT9Bud6YoPab52vpy
 
 Resolve the value of another name:
 
-  > ipfs name resolve QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ
+  > ifshare name resolve QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ
   /ipfs/QmSiTko9JZyabH56y2fussEt1A5oDqsFXB3CkvAqraFryz
 
 Resolve the value of a dnslink:
 
-  > ipfs name resolve ipfs.io
+  > ifshare name resolve ipfs.io
   /ipfs/QmaBvfZooxWkrv7D3r8LS9moNjzD2o525XMZze69hhoxf5
 
 `,

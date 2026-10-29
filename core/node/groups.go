@@ -271,10 +271,10 @@ func Identity(cfg *config.Config) fx.Option {
 
 	cid := cfg.Identity.PeerID
 	if cid == "" {
-		return fx.Error(errors.New("identity was not set in config (was 'ipfs init' run?)"))
+		return fx.Error(errors.New("identity was not set in config (was 'ifshare init' run?)"))
 	}
 	if len(cid) == 0 {
-		return fx.Error(errors.New("no peer ID in config! (was 'ipfs init' run?)"))
+		return fx.Error(errors.New("no peer ID in config! (was 'ifshare init' run?)"))
 	}
 
 	id, err := peer.Decode(cid)

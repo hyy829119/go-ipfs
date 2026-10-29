@@ -18,7 +18,7 @@ func (n *Node) IPFSCommands() []string {
 	var cmds []string
 	for _, line := range split {
 		trimmed := strings.TrimSpace(line)
-		if trimmed == "ipfs" {
+		if trimmed == "ifshare" || trimmed == "ipfs" {
 			continue
 		}
 		cmds = append(cmds, trimmed)

@@ -51,9 +51,9 @@ var SwarmCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Interact with the swarm.",
 		ShortDescription: `
-'ipfs swarm' is a tool to manipulate the network swarm. The swarm is the
+'ifshare swarm' is a tool to manipulate the network swarm. The swarm is the
 component that opens, listens for, and maintains connections to other
-ipfs peers in the internet.
+ifshare peers in the internet.
 `,
 	},
 	Subcommands: map[string]*cmds.Command{
@@ -87,7 +87,7 @@ var swarmPeeringCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Modify the peering subsystem.",
 		ShortDescription: `
-'ipfs swarm peering' manages the peering subsystem.
+'ifshare swarm peering' manages the peering subsystem.
 Peers in the peering subsystem are maintained to be connected, reconnected
 on disconnect with a back-off.
 The changes are not saved to the config.
@@ -104,7 +104,7 @@ var swarmPeeringAddCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Add peers into the peering subsystem.",
 		ShortDescription: `
-'ipfs swarm peering add' will add the new address to the peering subsystem as one that should always be connected to.
+'ifshare swarm peering add' will add the new address to the peering subsystem as one that should always be connected to.
 `,
 	},
 	Arguments: []cmds.Argument{
@@ -157,7 +157,7 @@ var swarmPeeringLsCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "List peers registered in the peering subsystem.",
 		ShortDescription: `
-'ipfs swarm peering ls' lists the peers that are registered in the peering subsystem and to which the daemon is always connected.
+'ifshare swarm peering ls' lists the peers that are registered in the peering subsystem and to which the daemon is always connected.
 `,
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
@@ -194,7 +194,7 @@ var swarmPeeringRmCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Remove a peer from the peering subsystem.",
 		ShortDescription: `
-'ipfs swarm peering rm' will remove the given ID from the peering subsystem and remove it from the always-on connection.
+'ifshare swarm peering rm' will remove the given ID from the peering subsystem and remove it from the always-on connection.
 `,
 	},
 	Arguments: []cmds.Argument{
@@ -235,7 +235,7 @@ var swarmPeersCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "List peers with open connections.",
 		ShortDescription: `
-'ipfs swarm peers' lists the set of peers this node is connected to.
+'ifshare swarm peers' lists the set of peers this node is connected to.
 `,
 	},
 	Options: []cmds.Option{
@@ -509,7 +509,7 @@ var swarmAddrsCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "List known addresses. Useful for debugging.",
 		ShortDescription: `
-'ipfs swarm addrs' lists all addresses this node is aware of.
+'ifshare swarm addrs' lists all addresses this node is aware of.
 `,
 	},
 	Subcommands: map[string]*cmds.Command{
@@ -565,7 +565,7 @@ var swarmAddrsLocalCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "List local addresses.",
 		ShortDescription: `
-'ipfs swarm addrs local' lists all local listening addresses announced to the network.
+'ifshare swarm addrs local' lists all local listening addresses announced to the network.
 `,
 	},
 	Options: []cmds.Option{
@@ -610,7 +610,7 @@ var swarmAddrsListenCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "List interface listening addresses.",
 		ShortDescription: `
-'ipfs swarm addrs listen' lists all interface addresses the node is listening on.
+'ifshare swarm addrs listen' lists all interface addresses the node is listening on.
 `,
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
@@ -642,13 +642,13 @@ var swarmConnectCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Open connection to a given peer.",
 		ShortDescription: `
-'ipfs swarm connect' attempts to ensure a connection to a given peer.
+'ifshare swarm connect' attempts to ensure a connection to a given peer.
 
 Multiaddresses given are advisory, for example the node may already be aware of other addresses for a given peer or may already have an established connection to the peer.
 
 The address format is a libp2p multiaddr:
 
-ipfs swarm connect /ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ
+ifshare swarm connect /ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ
 `,
 	},
 	Arguments: []cmds.Argument{
@@ -695,12 +695,12 @@ var swarmDisconnectCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Close connection to a given address.",
 		ShortDescription: `
-'ipfs swarm disconnect' closes a connection to a peer address. The address
+'ifshare swarm disconnect' closes a connection to a peer address. The address
 format is an IPFS multiaddr:
 
-ipfs swarm disconnect /ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ
+ifshare swarm disconnect /ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ
 
-The disconnect is not permanent; if ipfs needs to talk to that address later,
+The disconnect is not permanent; if ifshare needs to talk to that address later,
 it will reconnect.
 `,
 	},
@@ -807,7 +807,7 @@ func resolveAddresses(ctx context.Context, addrs []string, rslv *madns.Resolver)
 				}
 			}
 			if found == 0 {
-				resolveErrC <- fmt.Errorf("found no ipfs peers at %s", maddr)
+				resolveErrC <- fmt.Errorf("found no ifshare peers at %s", maddr)
 			}
 		}(maddr)
 	}
@@ -833,7 +833,8 @@ var swarmFiltersCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Manipulate address filters.",
 		ShortDescription: `
-'ipfs swarm filters' will list out currently applied filters. Its subcommands
+'ifshare swarm filters' will list out currently applied filters. Its
+subcommands
 can be used to add or remove said filters. Filters are specified using the
 multiaddr-filter format:
 
@@ -882,7 +883,7 @@ var swarmFiltersAddCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Add an address filter.",
 		ShortDescription: `
-'ipfs swarm filters add' will add an address filter to the daemons swarm.
+'ifshare swarm filters add' will add an address filter to the daemons swarm.
 `,
 	},
 	Arguments: []cmds.Argument{
@@ -938,7 +939,8 @@ var swarmFiltersRmCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
 		Tagline: "Remove an address filter.",
 		ShortDescription: `
-'ipfs swarm filters rm' will remove an address filter from the daemons swarm.
+'ifshare swarm filters rm' will remove an address filter from the daemons
+swarm.
 `,
 	},
 	Arguments: []cmds.Argument{

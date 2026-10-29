@@ -136,7 +136,7 @@ Computed default go-libp2p Resource Manager limits based on:
     - 'Swarm.ResourceMgr.MaxMemory': %q
     - 'Swarm.ResourceMgr.MaxFileDescriptors': %d
 
-These can be inspected with 'ipfs swarm resources'.
+These can be inspected with 'ifshare swarm resources'.
 
 `, humanize.Bytes(maxMemory), maxFD)
 

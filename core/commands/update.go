@@ -68,7 +68,7 @@ ENVIRONMENT VARIABLES
   HTTPS_PROXY
       HTTP proxy for reaching GitHub. Set this when GitHub is not
       directly reachable from your network.
-      Example: HTTPS_PROXY=http://proxy:8080 ipfs update install
+      Example: HTTPS_PROXY=http://proxy:8080 ifshare update install
 
   GITHUB_TOKEN
       GitHub personal access token. Raises the API rate limit from
@@ -151,7 +151,7 @@ ENVIRONMENT VARIABLES
 		cmds.Text: cmds.MakeTypedEncoder(func(req *cmds.Request, w io.Writer, out *UpdateCheckOutput) error {
 			if out.UpdateAvailable {
 				fmt.Fprintf(w, "Update available: %s -> %s\n", out.CurrentVersion, out.LatestVersion)
-				fmt.Fprintln(w, "Run 'ipfs update install' to install the latest version.")
+				fmt.Fprintln(w, "Run 'ifshare update install' to install the latest version.")
 			} else {
 				fmt.Fprintf(w, "Already up to date (%s)\n", out.CurrentVersion)
 			}
@@ -246,7 +246,7 @@ is saved to a temporary directory and the path is printed so you can
 move it manually (e.g. with sudo).
 
 Previous binaries are kept in $IPFS_PATH/old-bin/ and can be
-restored with 'ipfs update revert'.
+restored with 'ifshare update revert'.
 `,
 	},
 	NoRemote: true,
@@ -388,7 +388,7 @@ var updateRevertCmd = &cmds.Command{
 		Tagline: "Revert to a previously installed Kubo version",
 		ShortDescription: `
 Restores the most recently backed up binary from $IPFS_PATH/old-bin/.
-The backup is created automatically by 'ipfs update install'.
+The backup is created automatically by 'ifshare update install'.
 `,
 	},
 	NoRemote: true,
@@ -471,7 +471,7 @@ var updateCleanCmd = &cmds.Command{
 		Tagline: "Remove backups of previous Kubo versions",
 		ShortDescription: `
 Deletes every backed-up Kubo binary from $IPFS_PATH/old-bin/ to free
-disk space. After running this, 'ipfs update revert' will have nothing
+disk space. After running this, 'ifshare update revert' will have nothing
 to roll back to.
 
 Files in $IPFS_PATH/old-bin/ that do not match the 'ipfs-<version>'
@@ -570,7 +570,7 @@ func checkDaemonNotRunning() error {
 		return nil
 	}
 	if locked {
-		return fmt.Errorf("IPFS daemon is running (repo locked at %s). Stop it first with 'ipfs shutdown'", repoPath)
+		return fmt.Errorf("IPFS daemon is running (repo locked at %s). Stop it first with 'ifshare shutdown'", repoPath)
 	}
 	return nil
 }
@@ -758,7 +758,7 @@ func extractBinaryFromArchive(data []byte) ([]byte, error) {
 		return result, nil
 	}
 
-	return nil, fmt.Errorf("could not find ipfs binary in archive (expected kubo/%s): tar.gz: %v, zip: %v", binName, tarErr, zipErr)
+	return nil, fmt.Errorf("could not find ifshare binary in archive (expected kubo/%s): tar.gz: %v, zip: %v", binName, tarErr, zipErr)
 }
 
 func extractFromTarGz(data []byte, binName string) ([]byte, error) {

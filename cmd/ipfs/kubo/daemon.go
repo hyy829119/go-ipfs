@@ -86,31 +86,31 @@ const (
 
 var daemonCmd = &cmds.Command{
 	Helptext: cmds.HelpText{
-		Tagline: "Run a network-connected IPFS node.",
+		Tagline: "Run a network-connected ifshare node.",
 		ShortDescription: `
-'ipfs daemon' runs a persistent ipfs daemon that can serve commands
+'ifshare daemon' runs a persistent ifshare daemon that can serve commands
 over the network. Most applications that use IPFS will do so by
 communicating with a daemon over the HTTP API. While the daemon is
-running, calls to 'ipfs' commands will be sent over the network to
+running, calls to 'ifshare' commands will be sent over the network to
 the daemon.
 `,
 		LongDescription: `
 The Kubo daemon will start listening on ports on the network, which are
-documented in (and can be modified through) 'ipfs config Addresses'.
+documented in (and can be modified through) 'ifshare config Addresses'.
 For example, to change the 'Gateway' port:
 
-  ipfs config Addresses.Gateway /ip4/127.0.0.1/tcp/8082
+  ifshare config Addresses.Gateway /ip4/127.0.0.1/tcp/8082
 
 The RPC API address can be changed the same way:
 
-  ipfs config Addresses.API /ip4/127.0.0.1/tcp/5002
+  ifshare config Addresses.API /ip4/127.0.0.1/tcp/5002
 
 Make sure to restart the daemon after changing addresses.
 
 By default, the gateway is only accessible locally. To expose it to
 other computers in the network, use 0.0.0.0 as the ip address:
 
-  ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
+  ifshare config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
 
 Be careful if you expose the RPC API. It is a security risk, as anyone could
 control your node remotely. If you need to control the node remotely,
@@ -120,7 +120,7 @@ make sure to protect the port as you would other services or database
 If you do not want to open any ports for RPC, and only want to use
 kubo CLI client, it is possible to expose the RPC over Unix socket:
 
-  ipfs config Addresses.API /unix/var/run/kubo.socket
+  ifshare config Addresses.API /unix/var/run/kubo.socket
 
 HTTP Headers
 
@@ -128,8 +128,8 @@ Kubo supports passing arbitrary headers to the RPC API and Gateway. You can
 do this by setting headers on the API.HTTPHeaders and Gateway.HTTPHeaders
 keys:
 
-  ipfs config --json API.HTTPHeaders.X-Special-Header "[\"so special :)\"]"
-  ipfs config --json Gateway.HTTPHeaders.X-Special-Header "[\"so special :)\"]"
+  ifshare config --json API.HTTPHeaders.X-Special-Header "[\"so special :)\"]"
+  ifshare config --json Gateway.HTTPHeaders.X-Special-Header "[\"so special :)\"]"
 
 Note that the value of the keys is an _array_ of strings. This is because
 headers can have more than one value, and it is convenient to pass through
@@ -139,9 +139,9 @@ CORS Headers (for RPC API)
 
 You can setup CORS headers the same way:
 
-  ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"example.com\"]"
-  ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \"GET\", \"POST\"]"
-  ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials "[\"true\"]"
+  ifshare config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"example.com\"]"
+  ifshare config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \"GET\", \"POST\"]"
+  ifshare config --json API.HTTPHeaders.Access-Control-Allow-Credentials "[\"true\"]"
 
 Shutdown
 
@@ -173,7 +173,7 @@ Headers.
 	Options: []cmds.Option{
 		cmds.BoolOption(initOptionKwd, "Initialize Kubo with default settings if not already initialized"),
 		cmds.StringOption(initConfigOptionKwd, "Path to existing configuration file to be loaded during --init"),
-		cmds.StringOption(initProfileOptionKwd, "Configuration profiles to apply for --init. See ipfs init --help for more"),
+		cmds.StringOption(initProfileOptionKwd, "Configuration profiles to apply for --init. See ifshare init --help for more"),
 		cmds.StringOption(routingOptionKwd, "Overrides the routing option").WithDefault(routingOptionDefaultKwd),
 		cmds.BoolOption(mountKwd, "Mounts IPFS to the filesystem using FUSE (experimental)"),
 		cmds.StringOption(ipfsMountKwd, "Path to the mountpoint for IPFS (if using --mount). Defaults to config setting."),
@@ -187,7 +187,7 @@ Headers.
 		cmds.BoolOption(enablePubSubKwd, "DEPRECATED CLI flag. Use Pubsub.Enabled config instead."),
 		cmds.BoolOption(enableIPNSPubSubKwd, "DEPRECATED CLI flag. Use Ipns.UsePubsub config instead."),
 		cmds.BoolOption(enableMultiplexKwd, "DEPRECATED"),
-		cmds.StringOption(agentVersionSuffix, "Optional suffix to the AgentVersion presented by `ipfs id` and exposed via libp2p identify protocol."),
+		cmds.StringOption(agentVersionSuffix, "Optional suffix to the AgentVersion presented by `ifshare id` and exposed via libp2p identify protocol."),
 
 		// TODO: add way to override addresses. tricky part: updating the config if also --init.
 		// cmds.StringOption(apiAddrKwd, "Address for the daemon rpc API (overrides config)"),
@@ -354,7 +354,7 @@ func daemonFunc(req *cmds.Request, re cmds.ResponseEmitter, env cmds.Environment
 		close(migrationDone)
 
 		if !domigrate {
-			fmt.Printf("Not running migrations on repository at %s. Re-run daemon with --migrate or see 'ipfs repo migrate --help'\n", cctx.ConfigRoot)
+			fmt.Printf("Not running migrations on repository at %s. Re-run daemon with --migrate or see 'ifshare repo migrate --help'\n", cctx.ConfigRoot)
 			return errors.New("fs-repo requires migration")
 		}
 
@@ -560,7 +560,7 @@ RSA Peer IDs is more CPU-intensive than with other key types.
 It is recommended that you change your public key type to ed25519
 by using the following command:
 
-  ipfs key rotate -o rsa-key-backup -t ed25519
+  ifshare key rotate -o rsa-key-backup -t ed25519
 
 After changing your key type, restart your node for the changes to
 take effect.
@@ -718,7 +718,7 @@ take effect.
 
 ⚠️ Provide and Reprovide systems are disabled due to 'Provide.Enabled=false'
 ⚠️ Local CIDs will not be announced to Amino DHT, making them impossible to retrieve without manual peering
-⚠️ If this is not intentional, call 'ipfs config profile apply announce-on' or set Provide.Enabled=true'
+⚠️ If this is not intentional, call 'ifshare config profile apply announce-on' or set Provide.Enabled=true'
 
 `)
 		} else if cfg.Provide.DHT.Interval.WithDefault(config.DefaultProvideDHTInterval) == 0 {
@@ -726,7 +726,7 @@ take effect.
 
 ⚠️ Providing to the DHT is disabled due to 'Provide.DHT.Interval=0'
 ⚠️ Local CIDs will not be provided to Amino DHT, making them impossible to retrieve without manual peering
-⚠️ If this is not intentional, call 'ipfs config profile apply announce-on', or set 'Provide.DHT.Interval=22h'
+⚠️ If this is not intentional, call 'ifshare config profile apply announce-on', or set 'Provide.DHT.Interval=22h'
 
 `)
 		}
@@ -1056,7 +1056,7 @@ func printLibp2pPorts(node *core.IpfsNode) {
 		sort.Strings(protocols)
 		fmt.Printf("Swarm listening on %s (%s)\n", host, strings.Join(protocols, "+"))
 	}
-	fmt.Printf("Run 'ipfs id' to inspect announced and discovered multiaddrs of this node.\n")
+	fmt.Printf("Run 'ifshare id' to inspect announced and discovered multiaddrs of this node.\n")
 }
 
 // serveHTTPGateway collects options, creates listener, prints status message and starts serving requests.
@@ -1381,7 +1381,7 @@ func printVersion() {
 	if version.CurrentCommit != "" {
 		v += "-" + version.CurrentCommit
 	}
-	fmt.Printf("Kubo version: %s\n", v)
+	fmt.Printf("ifshare version: %s\n", v)
 	fmt.Printf("Repo version: %d\n", fsrepo.RepoVersion)
 	fmt.Printf("System version: %s\n", runtime.GOARCH+"/"+runtime.GOOS)
 	fmt.Printf("Golang version: %s\n", runtime.Version())

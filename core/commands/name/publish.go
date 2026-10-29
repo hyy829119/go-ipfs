@@ -46,7 +46,8 @@ the private key enables publishing new (signed) values. In both publish
 and resolve, the default name used is the node's own PeerID,
 which is the hash of its public key.
 
-You can use the 'ipfs key' commands to list and generate more names and their
+You can use the 'ifshare key' commands to list and generate more names and
+their
 respective keys.
 
 Publishing Modes:
@@ -61,17 +62,17 @@ Examples:
 
 Publish an <ipfs-path> with your default name:
 
-  > ipfs name publish /ipfs/QmatmE9msSfkKxoffpHwNLNKgwZG8eT9Bud6YoPab52vpy
+  > ifshare name publish /ipfs/QmatmE9msSfkKxoffpHwNLNKgwZG8eT9Bud6YoPab52vpy
   Published to QmbCMUZw6JFeZ7Wp9jkzbye3Fzp2GGcPgC3nmeUjfVF87n: /ipfs/QmatmE9msSfkKxoffpHwNLNKgwZG8eT9Bud6YoPab52vpy
 
 Publish without DHT (HTTP delegated publishers only):
 
-  > ipfs name publish --allow-delegated /ipfs/QmatmE9msSfkKxoffpHwNLNKgwZG8eT9Bud6YoPab52vpy
+  > ifshare name publish --allow-delegated /ipfs/QmatmE9msSfkKxoffpHwNLNKgwZG8eT9Bud6YoPab52vpy
   Published to QmbCMUZw6JFeZ7Wp9jkzbye3Fzp2GGcPgC3nmeUjfVF87n: /ipfs/QmatmE9msSfkKxoffpHwNLNKgwZG8eT9Bud6YoPab52vpy
 
 Publish when offline (local publish, network optional):
 
-  > ipfs name publish --allow-offline /ipfs/QmatmE9msSfkKxoffpHwNLNKgwZG8eT9Bud6YoPab52vpy
+  > ifshare name publish --allow-offline /ipfs/QmatmE9msSfkKxoffpHwNLNKgwZG8eT9Bud6YoPab52vpy
   Published to QmbCMUZw6JFeZ7Wp9jkzbye3Fzp2GGcPgC3nmeUjfVF87n: /ipfs/QmatmE9msSfkKxoffpHwNLNKgwZG8eT9Bud6YoPab52vpy
 
 Notes:
@@ -95,10 +96,10 @@ For faster IPNS updates, consider:
 	},
 
 	Arguments: []cmds.Argument{
-		cmds.StringArg(ipfsPathOptionName, true, false, "ipfs path of the object to be published.").EnableStdin(),
+		cmds.StringArg(ipfsPathOptionName, true, false, "ifshare path of the object to be published.").EnableStdin(),
 	},
 	Options: []cmds.Option{
-		cmds.StringOption(keyOptionName, "k", "Name of the key to be used or a valid PeerID, as listed by 'ipfs key list -l'.").WithDefault("self"),
+		cmds.StringOption(keyOptionName, "k", "Name of the key to be used or a valid PeerID, as listed by 'ifshare key list -l'.").WithDefault("self"),
 		cmds.BoolOption(resolveOptionName, "Check if the given path can be resolved before publishing.").WithDefault(true),
 		cmds.StringOption(lifeTimeOptionName, "t", `Time duration the signed record will be valid for. Accepts durations such as "300s", "1.5h" or "7d2h45m". Default: `+ipns.DefaultRecordLifetime.String()),
 		cmds.StringOption(ttlOptionName, "Time duration to cache this record before checking for updates. Must not exceed --lifetime. Default: "+ipns.DefaultRecordTTL.String()+" (capped to --lifetime)."),
