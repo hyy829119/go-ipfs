@@ -1162,6 +1162,32 @@ datastores to provide extra functionality (eg metrics, logging, or caching).
 > [!NOTE]
 > The datastore layout, including the flatfs `shardFunc`, is fixed when the repo is created. Kubo refuses to open a repo whose `Datastore.Spec` no longer matches its `datastore_spec` file. `ipfs config profile apply` refuses a profile that would change the layout. To change the layout, create a new repo with the wanted profiles and move the data there.
 
+IFShare also supports an opt-in S3 block mount: `ifshare init --storage=s3`.
+Set `IFSHARE_S3_ENDPOINT` and `IFSHARE_S3_BUCKET` before initialization; the bucket
+must already exist. Credentials come from `AWS_ACCESS_KEY_ID` and
+`AWS_SECRET_ACCESS_KEY` (optionally `AWS_SESSION_TOKEN`), or an owner-readable
+JSON file selected by `IFSHARE_S3_CREDENTIALS_FILE`. Secrets are never saved in
+`Datastore.Spec`. `IFSHARE_S3_REGION` defaults to `us-east-1`, and
+`IFSHARE_S3_PREFIX` defaults to `nodes/<PeerID>`. The resulting `s3ds` mount is
+saved in the config; these `IFSHARE_S3_*` initialization variables are not
+runtime overrides.
+
+Only blocks move to S3; identity, pins, MFS metadata and other node state still
+need the local repository. Every node needs a separate object prefix. A prefix
+ownership object rejects another identity attempting to reuse it, because
+independent pin sets and garbage collectors cannot safely share a block mount.
+The endpoint, bucket, region, prefix and owner are part of the repository layout
+and cannot be changed in place. The credentials file, request timeout, usage
+cache TTL and batch concurrency can be adjusted while the daemon is stopped.
+See [S3 datastore settings](datastores.md#s3ds) and the
+[local MinIO and S3 guide](s3-storage-zh.md) for setup and tuning.
+
+S3 is disabled by default. Use `ifshare init --storage=local`, or omit `--storage`,
+to keep the existing local storage behavior without S3 credentials or requests.
+Disabling S3 for an existing S3 repository requires exporting its data into a
+new local repository; editing the config does not migrate objects. Passing
+`--storage` to `ifshare daemon` verifies the saved mode, and refuses a mismatch.
+
 Default (the [`flatfs-levelds` profile](#flatfs-levelds-profile): blocks in flatfs, everything else in leveldb):
 
 ```

@@ -10,6 +10,7 @@ import (
 	"net/http"
 	_ "net/http/pprof"
 	"os"
+	"path/filepath"
 	"regexp"
 	"runtime"
 	"sort"
@@ -174,6 +175,7 @@ Headers.
 		cmds.BoolOption(initOptionKwd, "Initialize Kubo with default settings if not already initialized"),
 		cmds.StringOption(initConfigOptionKwd, "Path to existing configuration file to be loaded during --init"),
 		cmds.StringOption(initProfileOptionKwd, "Configuration profiles to apply for --init. See ifshare init --help for more"),
+		cmds.StringOption(storageOptionName, "Storage mode for --init, or verify an existing repository: local or s3."),
 		cmds.StringOption(routingOptionKwd, "Overrides the routing option").WithDefault(routingOptionDefaultKwd),
 		cmds.BoolOption(mountKwd, "Mounts IPFS to the filesystem using FUSE (experimental)"),
 		cmds.StringOption(ipfsMountKwd, "Path to the mountpoint for IPFS (if using --mount). Defaults to config setting."),
@@ -288,6 +290,19 @@ func daemonFunc(req *cmds.Request, re cmds.ResponseEmitter, env cmds.Environment
 	// first, whether user has provided the initialization flag. we may be
 	// running in an uninitialized state.
 	initialize, _ := req.Options[initOptionKwd].(bool)
+	storage, _ := req.Options[storageOptionName].(string)
+	if err := validateStorageMode(storage); err != nil {
+		return err
+	}
+	if storage != "" && fsrepo.IsInitialized(cctx.ConfigRoot) {
+		conf, err := cserial.Load(filepath.Join(cctx.ConfigRoot, "config"))
+		if err != nil {
+			return err
+		}
+		if err := checkStorageMode(conf, storage); err != nil {
+			return err
+		}
+	}
 	if initialize && !fsrepo.IsInitialized(cctx.ConfigRoot) {
 		cfgLocation, _ := req.Options[initConfigOptionKwd].(string)
 		profiles, _ := req.Options[initProfileOptionKwd].(string)
@@ -312,7 +327,7 @@ func daemonFunc(req *cmds.Request, re cmds.ResponseEmitter, env cmds.Environment
 			}
 		}
 
-		if err = doInit(os.Stdout, cctx.ConfigRoot, false, profiles, conf); err != nil {
+		if err = doInit(os.Stdout, cctx.ConfigRoot, false, profiles, conf, storage); err != nil {
 			return err
 		}
 	}

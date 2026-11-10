@@ -68,6 +68,14 @@ flatfs for blocks and uses pebble instead of leveldb, and 'pebbleds' puts
 everything in pebble. Details and trade-offs:
 https://github.com/ipfs/kubo/blob/master/docs/datastores.md
 
+Use --storage=local for local storage, or --storage=s3 to store blocks in
+S3 while keeping node metadata locally. S3 reads IFSHARE_S3_ENDPOINT and
+IFSHARE_S3_BUCKET. Credentials come from AWS_ACCESS_KEY_ID and
+AWS_SECRET_ACCESS_KEY, or IFSHARE_S3_CREDENTIALS_FILE (an absolute path).
+IFSHARE_S3_REGION defaults to us-east-1; IFSHARE_S3_PREFIX defaults to a
+separate prefix for this Peer ID. The choice is saved at initialization.
+Changing an existing repository's backend requires data migration.
+
 ifshare uses a repository in the local file system. By default, the repo is
 located at ~/.ipfs. To change the repo location, set the $IPFS_PATH
 environment variable:
@@ -83,6 +91,7 @@ environment variable:
 		cmds.IntOption(bitsOptionName, "b", "Number of bits to use in the generated RSA private key."),
 		cmds.BoolOption(emptyRepoOptionName, "e", "Don't add and pin help files to the local storage.").WithDefault(emptyRepoDefault),
 		cmds.StringOption(profileOptionName, "p", "Apply profile settings to config. Multiple profiles can be separated by ','"),
+		cmds.StringOption(storageOptionName, "Block storage mode: local (default) or s3."),
 
 		// TODO need to decide whether to expose the override as a file or a
 		// directory. That is: should we allow the user to also specify the
@@ -97,6 +106,10 @@ environment variable:
 		empty, _ := req.Options[emptyRepoOptionName].(bool)
 		algorithm, _ := req.Options[algorithmOptionName].(string)
 		nBitsForKeypair, nBitsGiven := req.Options[bitsOptionName].(int)
+		storage, _ := req.Options[storageOptionName].(string)
+		if err := validateStorageMode(storage); err != nil {
+			return err
+		}
 
 		var conf *config.Config
 
@@ -143,7 +156,7 @@ environment variable:
 		}
 
 		profiles, _ := req.Options[profileOptionName].(string)
-		return doInit(os.Stdout, cctx.ConfigRoot, empty, profiles, conf)
+		return doInit(os.Stdout, cctx.ConfigRoot, empty, profiles, conf, storage)
 	},
 }
 
@@ -165,7 +178,7 @@ func applyProfiles(conf *config.Config, profiles string) error {
 	return nil
 }
 
-func doInit(out io.Writer, repoRoot string, empty bool, confProfiles string, conf *config.Config) error {
+func doInit(out io.Writer, repoRoot string, empty bool, confProfiles string, conf *config.Config, storage string) error {
 	// a config without a private key (the output of 'ipfs config show')
 	// seeds a repo that panics on every later start
 	if conf.Identity.PrivKey == "" {
@@ -185,6 +198,9 @@ func doInit(out io.Writer, repoRoot string, empty bool, confProfiles string, con
 	}
 
 	if err := applyProfiles(conf, confProfiles); err != nil {
+		return err
+	}
+	if err := configureStorage(conf, storage, repoRoot); err != nil {
 		return err
 	}
 

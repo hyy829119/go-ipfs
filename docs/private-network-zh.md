@@ -153,6 +153,7 @@ openssl dgst -sha256 "$IPFS_PATH/swarm.key"
 
 ```bash
 ifshare config --json Addresses.Swarm '["/ip4/0.0.0.0/tcp/4001"]'
+ifshare config --json Swarm.Transports.Network.Websocket false
 ifshare config Addresses.API /ip4/127.0.0.1/tcp/5001
 ifshare config Addresses.Gateway /ip4/127.0.0.1/tcp/8080
 ifshare config Routing.Type dht
@@ -162,7 +163,7 @@ ifshare config --json Swarm.DisableNatPortMap true
 ifshare config Plugins.Plugins.telemetry.Config.Mode off
 ```
 
-这些命令使节点通过内网 TCP 互连，关闭公网证书申请、局域网自动发现、路由器自动端口映射和遥测。新仓库已经关闭 AutoConf，不需要再次配置；已有仓库请先执行第 10 节。
+这些命令使节点通过内网 TCP 互连，关闭 WebSocket、公网证书申请、局域网自动发现、路由器自动端口映射和遥测。关闭 WebSocket 可避免私网启动时出现 TCP 监听复用不受支持的错误日志。新仓库已经关闭 AutoConf，不需要再次配置；已有仓库请先执行第 10 节。
 
 使用多个网卡的主机，应确认其他节点实际能够访问配置的 IP。跨网段部署需要相应路由和防火墙规则；有相同密钥并不能解决网络不可达问题。
 

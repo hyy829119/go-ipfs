@@ -92,6 +92,57 @@ Use the raw `config` file, not the output of `ipfs config show`. That output has
 
 To change the depth of an existing repo, create a new repo with the wanted layout and move the data there. Use `ipfs dag export` and `ipfs dag import` for whole DAGs, or `ipfs pin ls -t recursive` on the old node and `ipfs pin add` on the new one. Kubo has no command that re-shards a repo in place.
 
+## s3ds
+
+IFShare includes the `ds-s3` plugin in its executable. It mounts S3-compatible
+storage at `/blocks`, with local LevelDB at `/` for mutable node metadata.
+Initialize with `ifshare init --storage=s3`; see the
+[setup guide](s3-storage-zh.md). Omit the option, or use `--storage=local`, to
+disable S3 when creating a repository. Existing layouts require migration to a
+new repository, rather than changing `datastore_spec` by hand.
+
+The plugin follows the datastore integration approach used by
+[ipfs/go-ds-s3](https://github.com/ipfs/go-ds-s3), using
+[AWS SDK for Go v2](https://github.com/aws/aws-sdk-go-v2) for signing, connection
+reuse and bounded retries. It does not require loading a separate Go `.so`.
+
+| Field | Meaning |
+| --- | --- |
+| `type` | `s3ds` |
+| `mountpoint` | `/blocks` |
+| `endpoint` | Explicit HTTP or HTTPS S3 endpoint; path-style addressing is used. |
+| `bucket` | Existing bucket; the plugin does not create it. |
+| `region` | Signing region; init defaults to `us-east-1`. |
+| `rootDirectory` | Exclusive relative prefix; init defaults to `nodes/<PeerID>`. |
+| `owner` | Repository Peer ID, checked against `<rootDirectory>/.ifshare-owner`. |
+| `credentialsFile` | Optional absolute path to a private JSON file with `accessKey`, `secretKey`, and optional `sessionToken`. On Unix its permissions must exclude group and other users, e.g. `0600`. If omitted, use `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and optional `AWS_SESSION_TOKEN` at runtime. |
+| `concurrency` | Maximum requests in a batch commit: integer `1`–`128`, default `16`. |
+| `requestTimeout` | Positive duration, default `30s`, per HTTP attempt including reading its body. SDK retries up to three attempts, honoring the caller's cancellation. |
+| `usageCacheTTL` | Duration, default `30s`; `0s` disables caching of the prefix's object-size sum. Deletes invalidate the cache. New writes may take up to the TTL to appear in repo statistics. |
+
+Blocks use `<rootDirectory>/blocks/<datastore-key>`. Lists stream pages of at
+most 1,000 objects. Key-only queries avoid downloading block bodies, and ascending
+key queries avoid sorting the entire block set in memory. Batch commits reuse
+connections, issue bounded parallel requests, copy borrowed input buffers, and
+release these buffers on completion or failure. A failed batch may have applied
+some operations, as with other non-transactional datastores; immutable block
+writes can be retried. S3 acknowledgements make `Sync` a no-op.
+
+The bucket must support read-after-write/list consistency and conditional
+`PutObject` (`If-None-Match: *`). The credentials need `ListBucket` for the prefix
+and `GetObject`, `PutObject`, `DeleteObject` for its objects, including the
+ownership object. SSE, versioning and lifecycle policies are managed on the
+bucket. Do not expire live blocks with a lifecycle rule. If versioning is enabled,
+GC removes current versions; historical versions require a separate bucket policy.
+
+Prefixes must be exclusive and non-overlapping, even for cloned repositories
+with the same Peer ID. Do not point two active nodes at the same prefix or put
+unrelated files under its `blocks/` directory. Back up both the local repository
+and S3 objects; the bucket alone does not preserve identity, pins or MFS paths.
+If S3 is unavailable, reads and writes report errors rather than falling back
+to a separate local blockstore. The existing CID, gateway, RPC and network
+protocols are unchanged.
+
 ## levelds
 
 Uses a [leveldb](https://github.com/syndtr/goleveldb) database to store key-value
